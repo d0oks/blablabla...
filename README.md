@@ -1,66 +1,97 @@
-# Blablabla — Backend de détection
+# Blablabla
 
-Ce petit serveur reçoit les fichiers image/vidéo depuis le site, les transmet
-à Hive Moderation (ou un autre fournisseur), et renvoie uniquement le score —
-sans jamais exposer ta clé API au navigateur.
+Outil gratuit pour les recruteurs : détecte les traces de génération par IA
+dans un texte, une photo ou une vidéo de candidature, et convertit des
+fichiers (image / PDF / Word) sans rien installer.
 
-## 1. Obtenir une clé API
+**Démo publiée par Claude :** garde le lien reçu dans la conversation pour
+voir le rendu avant de déployer.
 
-- **Hive Moderation** : https://thehive.ai — offre l'image, la vidéo et le texte
-  sous une seule API. Compte pro nécessaire pour un usage en production.
-- **Sightengine** : alternative moins chère, bon plan gratuit pour tester.
-- **Sensity** : spécialisé deepfake vidéo, plus cher, plus précis sur ce point précis.
+## Structure du dépôt
 
-Commence par un compte d'essai chez un seul fournisseur (Hive couvre les trois
-formats, c'est le plus simple pour démarrer).
-
-## 2. Configurer en local
-
-```bash
-npm install
-cp .env.example .env
-# édite .env et colle ta clé HIVE_API_KEY
-npm start
+```
+blablabla/
+├── index.html           → page principale
+├── 404.html              → page d'erreur GitHub Pages
+├── favicon.svg            → icône de l'onglet
+├── robots.txt              → indique aux moteurs de recherche quoi explorer
+├── sitemap.xml              → plan du site pour l'indexation
+├── css/
+│   └── style.css        → tous les styles
+├── js/
+│   ├── detector.js       → onglets Texte / Photo / Vidéo
+│   └── converters.js     → convertisseurs de fichiers
+└── backend/              → serveur relais optionnel (voir plus bas)
+    ├── server.js
+    ├── package.json
+    ├── .env.example
+    └── README.md
 ```
 
-Le serveur tourne sur `http://localhost:3000`.
+**Avant de déployer**, remplace `TON-COMPTE` par ton vrai nom d'utilisateur
+GitHub dans trois fichiers : `sitemap.xml`, `robots.txt`, et les balises
+`<meta property="og:...">` / `<link rel="canonical">` en haut d'`index.html`.
+Un rechercher-remplacer global sur `TON-COMPTE` suffit.
 
-## 3. Déployer (Render — le plus simple pour démarrer)
+## Ce qui marche tout de suite, sans rien configurer
 
-1. Crée un compte sur render.com
-2. "New Web Service" → connecte ce dossier (ou pousse-le sur un repo GitHub)
-3. Build command : `npm install`
-4. Start command : `npm start`
-5. Dans "Environment", ajoute la variable `HIVE_API_KEY` avec ta vraie clé
-6. Ajoute aussi `ALLOWED_ORIGIN` avec l'URL de ton site publié, pour que seul
-   ton front puisse appeler ce serveur
+- **Détecteur de texte** : heuristique locale (uniformité des phrases,
+  tournures typiques des LLM). Tourne entièrement dans le navigateur.
+- **Tous les convertisseurs** : image ↔ format, images → PDF, PDF → images,
+  Word → PDF, PDF → Word. Aucun serveur, aucune clé, aucune limite d'usage —
+  tout se passe côté client via des librairies JS chargées depuis un CDN.
 
-Une fois déployé, tu obtiens une URL du type `https://blablabla-backend.onrender.com`.
+## Ce qui nécessite le backend (optionnel)
 
-## 4. Brancher le front dessus
+- **Détecteur photo et vidéo** : une vraie analyse (pas juste la démo)
+  demande d'appeler une API comme Hive Moderation. Ça ne peut pas se faire
+  en toute sécurité depuis une page statique (la clé serait visible par
+  n'importe qui), donc il faut le petit serveur du dossier `backend/`.
+  Voir `backend/README.md` pour le déployer en quelques minutes sur Render.
 
-Dans `index.html`, remplace la fonction `runDemo()` par un vrai appel :
+Sans backend, ces deux onglets restent utilisables en **mode démo**
+(résultat d'exemple clairement annoncé comme tel).
 
-```javascript
-async function analyzeFile(kind, file) {
-  const form = new FormData();
-  form.append('file', file);
-  const res = await fetch('https://blablabla-backend.onrender.com/api/detect-' + kind, {
-    method: 'POST',
-    body: form
-  });
-  return res.json();
-}
-```
+## Déployer le site sur GitHub Pages (gratuit)
 
-Attention : un fichier HTML publié tel quel sur claude.ai a une politique de
-sécurité qui bloque les appels vers des domaines externes. Pour une vraie mise
-en production, héberge ce front ailleurs (Vercel, Netlify, ou ton propre
-hébergement) une fois le backend prêt — l'aperçu Claude reste idéal pour la
-démonstration et la validation du design, pas pour la version finale en ligne.
+1. Crée un nouveau dépôt sur GitHub, par exemple `blablabla`
+2. Pousse tout le contenu de ce dossier à la racine du dépôt :
+   ```bash
+   git init
+   git add .
+   git commit -m "Premier déploiement de Blablabla"
+   git branch -M main
+   git remote add origin https://github.com/TON-COMPTE/blablabla.git
+   git push -u origin main
+   ```
+3. Dans le dépôt GitHub : **Settings → Pages**
+4. Source : **Deploy from a branch** → branche `main`, dossier `/ (root)`
+5. Après une minute ou deux, le site est en ligne à :
+   `https://TON-COMPTE.github.io/blablabla/`
 
-## 5. Coûts à anticiper
+Aucune étape de build n'est nécessaire — c'est du HTML/CSS/JS statique,
+GitHub Pages le sert tel quel.
 
-Les fournisseurs facturent à l'appel (souvent entre 0,001€ et 0,01€ par
-analyse selon le volume). Avant de fixer tes propres tarifs, teste le coût
-réel sur un échantillon de 100 documents pour calculer ta marge.
+## Personnaliser
+
+- **Couleurs et polices** : tout est dans `css/style.css`, sous `:root` en
+  haut du fichier pour les couleurs.
+- **Textes** : directement dans `index.html`.
+- **Ajouter un logo/favicon** : place un fichier `favicon.ico` à la racine
+  et ajoute `<link rel="icon" href="favicon.ico">` dans le `<head>`.
+
+## Limites connues (honnêteté d'abord)
+
+- Le détecteur de texte est une heuristique simple, pas un modèle entraîné :
+  utile comme premier filtre, pas comme preuve.
+- `Word → PDF` rend le document sous forme d'image dans le PDF (via capture
+  d'écran) — le texte n'est donc pas sélectionnable dans le PDF généré.
+- `PDF → Word` extrait le texte brut sans reconstruire la mise en page
+  d'origine (colonnes, tableaux, styles perdus).
+- Les gros fichiers (PDF de nombreuses pages, vidéos longues) peuvent être
+  lents à traiter car tout tourne dans le navigateur du visiteur.
+
+## Licence
+
+Fais-en ce que tu veux — adapte, renomme, revends, héberge. Aucune
+attribution requise.
