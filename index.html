@@ -26,11 +26,19 @@
     <a href="#top" class="wordmark"><span class="mark">Blablabla</span><span class="dot"></span></a>
     <div class="navwrap">
       <nav class="top">
-        <a href="#probleme">Le problème</a>
         <a href="#outil">Détecteur</a>
         <a href="#convertisseurs">Convertisseurs</a>
       </nav>
       <span class="free-pill">100% GRATUIT</span>
+      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-label="Ouvrir le menu">
+        <span class="bars"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-inner">
+      <a href="#outil">Détecteur</a>
+      <a href="#convertisseurs">Convertisseurs</a>
     </div>
   </div>
 </header>
@@ -40,12 +48,8 @@
   <section class="hero" style="border-top:none; padding-top:56px;">
     <div class="wrap hero-grid">
       <div>
-        <h1>Un CV convaincant ne veut plus dire un candidat réel.</h1>
-        <p class="lede">Blablabla vérifie les lettres de motivation, photos de profil et entretiens vidéo pour repérer les traces de génération par IA — et convertit tes fichiers de candidature au passage. Gratuit, sans compte, tout tourne dans ton navigateur.</p>
-        <div class="hero-actions">
-          <a href="#outil" class="cta-btn">Tester un document</a>
-          <a href="#convertisseurs" class="link-quiet">Voir les convertisseurs</a>
-        </div>
+        <h1>Repère une image, une vidéo ou un texte généré par IA — et convertis tes fichiers dans la foulée.</h1>
+        <p class="lede">Blablabla analyse les photos, vidéos et textes pour détecter les traces de génération par IA, et propose des convertisseurs gratuits (image, PDF, Word) pour manipuler tes fichiers au passage. Gratuit, sans compte, tout tourne dans ton navigateur.</p>
       </div>
       <div class="dossier">
         <div class="dossier-row"><span class="k">Document</span><span class="v">lettre_motivation.txt</span></div>
@@ -57,43 +61,28 @@
     </div>
   </section>
 
-  <section id="probleme">
+  <section id="outil" class="section-tint">
     <div class="wrap">
       <div class="section-head">
-        <div class="eyebrow">LE CONTEXTE</div>
-        <h2>Trois failles que les recruteurs découvrent trop tard</h2>
-        <p>La génération de contenu par IA a rendu la fraude de candidature accessible à n'importe qui — sans compétence technique, sans budget.</p>
-      </div>
-      <div class="cases">
-        <div class="case">
-          <h3>Lettres identiques</h3>
-          <p>Des centaines de lettres de motivation qui suivent exactement la même structure, le même vocabulaire, les mêmes transitions — parce qu'elles sortent du même modèle.</p>
-        </div>
-        <div class="case">
-          <h3>Photos de profil générées</h3>
-          <p>Des photos "professionnelles" qui n'existent nulle part ailleurs sur le web, produites pour construire une identité de toutes pièces.</p>
-        </div>
-        <div class="case">
-          <h3>Entretiens par procuration</h3>
-          <p>Une personne se présente en visio à la place du candidat réel, parfois avec un visage ou une voix modifiés en temps réel.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="outil">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="eyebrow">LE DÉTECTEUR</div>
+        <div class="eyebrow"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="6.5"/><line x1="14.8" y1="14.8" x2="20.5" y2="20.5"/></svg>LE DÉTECTEUR</div>
         <h2>Analyse en trois volets</h2>
         <p>Colle un texte, dépose une image ou une vidéo. L'analyse de texte tourne en local dans ton navigateur — les analyses image et vidéo nécessitent une clé API et le backend fourni (voir le README du dépôt).</p>
       </div>
 
       <div class="tool-shell">
         <div class="tabs">
-          <button class="tab-btn active" data-tab="texte">Texte</button>
-          <button class="tab-btn" data-tab="photo">Photo</button>
-          <button class="tab-btn" data-tab="video">Vidéo</button>
+          <button class="tab-btn active" data-tab="texte">
+            <span class="filetag txt">TXT</span>
+            <span class="tab-label">Texte</span>
+          </button>
+          <button class="tab-btn" data-tab="photo">
+            <span class="filetag img">IMG</span>
+            <span class="tab-label">Photo</span>
+          </button>
+          <button class="tab-btn" data-tab="video">
+            <span class="filetag vid">VID</span>
+            <span class="tab-label">Vidéo</span>
+          </button>
         </div>
 
         <div class="tab-panel active" id="panel-texte">
@@ -161,16 +150,37 @@
   <section id="convertisseurs">
     <div class="wrap">
       <div class="section-head">
-        <div class="eyebrow">BOÎTE À OUTILS</div>
+        <div class="eyebrow"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/></svg>BOÎTE À OUTILS</div>
         <h2>Convertisseurs de fichiers</h2>
         <p>Pratique pour manipuler les documents de candidature (CV en PDF, photos, etc.). Tout se passe dans ton navigateur — aucun fichier n'est envoyé où que ce soit.</p>
       </div>
 
-      <div class="conv-grid">
+      <div class="conv-shell">
+        <div class="conv-tabs">
+          <button class="conv-tab active" data-conv="img">
+            <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">⇄</span><span class="filetag img">IMG</span></span>
+            <span class="tab-label">Formats</span>
+          </button>
+          <button class="conv-tab" data-conv="imgs2pdf">
+            <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
+            <span class="tab-label">Images → PDF</span>
+          </button>
+          <button class="conv-tab" data-conv="pdf2imgs">
+            <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag img">IMG</span></span>
+            <span class="tab-label">PDF → Images</span>
+          </button>
+          <button class="conv-tab" data-conv="word2pdf">
+            <span class="tab-icon-row"><span class="filetag doc">DOC</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
+            <span class="tab-label">Word → PDF</span>
+          </button>
+          <button class="conv-tab" data-conv="pdf2word">
+            <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag doc">DOC</span></span>
+            <span class="tab-label">PDF → Word</span>
+          </button>
+        </div>
 
-        <div class="conv-card">
-          <h3>Image → PNG / JPG / WebP</h3>
-          <p class="conv-desc">Change le format d'une image et ajuste sa qualité.</p>
+        <div class="conv-panel active" id="conv-panel-img">
+          <p class="conv-desc">Change le format d'une image (PNG, JPG, WebP) et ajuste sa qualité.</p>
           <div class="conv-drop" id="drop-img-conv">Dépose une image ou clique</div>
           <input type="file" accept="image/*" id="file-img-conv" style="display:none">
           <div class="conv-filelist" id="list-img-conv"></div>
@@ -194,8 +204,7 @@
           <div class="conv-download" id="download-img-conv"></div>
         </div>
 
-        <div class="conv-card">
-          <h3>Images → PDF</h3>
+        <div class="conv-panel" id="conv-panel-imgs2pdf">
           <p class="conv-desc">Assemble plusieurs images en un seul PDF, une par page.</p>
           <div class="conv-drop" id="drop-imgs2pdf">Dépose une ou plusieurs images, ou clique</div>
           <input type="file" accept="image/*" id="file-imgs2pdf" multiple style="display:none">
@@ -207,8 +216,7 @@
           <div class="conv-download" id="download-imgs2pdf"></div>
         </div>
 
-        <div class="conv-card">
-          <h3>PDF → Images</h3>
+        <div class="conv-panel" id="conv-panel-pdf2imgs">
           <p class="conv-desc">Exporte chaque page d'un PDF en image PNG, regroupées dans un .zip.</p>
           <div class="conv-drop" id="drop-pdf2imgs">Dépose un PDF ou clique</div>
           <input type="file" accept="application/pdf" id="file-pdf2imgs" style="display:none">
@@ -220,8 +228,7 @@
           <div class="conv-download" id="download-pdf2imgs"></div>
         </div>
 
-        <div class="conv-card">
-          <h3>Word (.docx) → PDF</h3>
+        <div class="conv-panel" id="conv-panel-word2pdf">
           <p class="conv-desc">Convertit un document Word en PDF. Fonctionne bien pour du texte simple ; les mises en page complexes peuvent varier légèrement.</p>
           <div class="conv-drop" id="drop-word2pdf">Dépose un .docx ou clique</div>
           <input type="file" accept=".docx" id="file-word2pdf" style="display:none">
@@ -233,8 +240,7 @@
           <div class="conv-download" id="download-word2pdf"></div>
         </div>
 
-        <div class="conv-card">
-          <h3>PDF → Word</h3>
+        <div class="conv-panel" id="conv-panel-pdf2word">
           <p class="conv-desc">Extrait le texte d'un PDF dans un fichier .doc modifiable. Mise en forme simplifiée : c'est le texte brut, pas une reconstruction fidèle de la mise en page.</p>
           <div class="conv-drop" id="drop-pdf2word">Dépose un PDF ou clique</div>
           <input type="file" accept="application/pdf" id="file-pdf2word" style="display:none">
@@ -245,48 +251,17 @@
           </div>
           <div class="conv-download" id="download-pdf2word"></div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <section id="integration">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="eyebrow">CÔTÉ TECHNIQUE</div>
-        <h2>Pourquoi Photo/Vidéo ont besoin d'un petit serveur</h2>
-      </div>
-      <div class="integ-grid">
-        <div class="integ-note">
-          <p>Les convertisseurs de fichiers et l'analyse de texte tournent entièrement dans le navigateur — aucune clé API, aucun serveur, gratuit et privé.</p>
-          <p>Pour <strong>Photo</strong> et <strong>Vidéo</strong>, une vraie détection nécessite d'appeler une API comme Hive Moderation ou Sightengine. Impossible de le faire correctement depuis une page statique : la clé API serait visible par n'importe quel visiteur qui inspecte le code.</p>
-          <p>Le dossier <code class="inline">backend/</code> de ce dépôt contient un petit serveur relais prêt à déployer (Render, Railway, Vercel) qui garde la clé secrète côté serveur. Voir <code class="inline">backend/README.md</code> pour la marche à suivre complète.</p>
-        </div>
-        <pre class="code-block">// backend/server.js — extrait
-const HIVE_KEY = process.env.HIVE_API_KEY; // jamais exposée au client
-
-app.post('/api/detect-image', upload.single('file'), async (req, res) => {
-  const form = new FormData();
-  form.append('media', new Blob([req.file.buffer]));
-  const r = await fetch('https://api.thehive.ai/api/v2/task/sync', {
-    method: 'POST',
-    headers: { 'Authorization': `Token ${HIVE_KEY}` },
-    body: form
-  });
-  res.json(await r.json());
-});</pre>
-      </div>
-    </div>
-  </section>
-
-</main>
+  </main>
 
 <footer>
   <div class="wrap">
     <div class="foot-row">
       <a href="#top" class="wordmark"><span class="mark">Blablabla</span><span class="dot"></span></a>
       <nav class="top">
-        <a href="#probleme">Le problème</a>
         <a href="#outil">Détecteur</a>
         <a href="#convertisseurs">Convertisseurs</a>
       </nav>

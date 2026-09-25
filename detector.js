@@ -1,5 +1,21 @@
-// detector.js — Onglets Texte / Photo / Vidéo du détecteur Blablabla
+// detector.js — Onglets Texte / Photo / Vidéo du détecteur, + menu mobile
 (function () {
+  // ---- Mobile nav toggle ----
+  var navToggle = document.getElementById('nav-toggle');
+  var mobileNav = document.getElementById('mobile-nav');
+  if (navToggle && mobileNav) {
+    navToggle.addEventListener('click', function () {
+      var isOpen = mobileNav.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    mobileNav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        mobileNav.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
   var tabBtns = document.querySelectorAll('.tab-btn');
   var panels = document.querySelectorAll('.tab-panel');
   tabBtns.forEach(function (btn) {

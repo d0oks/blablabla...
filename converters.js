@@ -2,6 +2,18 @@
 // Rien n'est envoyé à un serveur : tout se passe dans l'onglet du visiteur.
 (function () {
 
+  // ---- Converter tabs (single tool visible at a time, saves scroll on mobile) ----
+  var convTabs = document.querySelectorAll('.conv-tab');
+  var convPanels = document.querySelectorAll('.conv-panel');
+  convTabs.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      convTabs.forEach(function (b) { b.classList.remove('active'); });
+      convPanels.forEach(function (p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('conv-panel-' + btn.dataset.conv).classList.add('active');
+    });
+  });
+
   function bytesToSize(bytes) {
     if (bytes < 1024) return bytes + ' o';
     if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' Ko';
