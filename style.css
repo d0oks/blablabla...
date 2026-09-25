@@ -32,7 +32,13 @@ body {
   font-family: 'IBM Plex Sans', system-ui, sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  text-align: center;
 }
+/* Texte centré partout, sauf là où ça casserait la lisibilité :
+   champs de formulaire, listes de fichiers/données, paires clé-valeur */
+textarea.ta, input[type=text], .conv-options select, .settings-panel select,
+.conv-filelist, .file-preview, .signals, .dossier-row, .mobile-nav-inner a,
+.conv-desc { text-align: left; }
 .serif { font-family: 'Newsreader', Georgia, serif; }
 .mono { font-family: 'IBM Plex Mono', 'Courier New', monospace; }
 a { color: inherit; }
@@ -126,27 +132,24 @@ nav.top a:hover { background: var(--paper); color: var(--ink); }
 .link-quiet { font-size: 0.9rem; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
 
 .dossier {
-  background: linear-gradient(180deg, var(--paper-alt) 0%, var(--paper-deep) 100%);
-  border: 1px solid var(--border-accent); border-radius: 18px; box-shadow: var(--shadow);
-  padding: 22px; position: relative; overflow: hidden;
+  background: var(--paper-alt); border: 1px solid var(--line); box-shadow: var(--shadow);
+  padding: 22px; position: relative; transform: rotate(-0.6deg);
 }
-@media (max-width: 640px) { .dossier { padding: 18px; } }
+@media (max-width: 640px) { .dossier { padding: 18px; transform: none; } }
 .dossier::before {
-  content: "DOSSIER 04-C"; position: absolute; top: 14px; right: 18px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.64rem; letter-spacing: 0.06em; color: var(--ink-soft);
+  content: "DOSSIER 04-C"; position: absolute; top: -11px; left: 20px;
+  background: var(--paper); padding: 2px 10px; font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.66rem; letter-spacing: 0.06em; color: var(--ink-soft); border: 1px solid var(--line);
 }
-.dossier-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 0.84rem; }
-.dossier-row:first-of-type { padding-top: 20px; }
+.dossier-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 0.84rem; }
 .dossier-row:last-of-type { border-bottom: none; }
 .dossier-row .k { color: var(--ink-soft); }
 .dossier-row .v { font-family: 'IBM Plex Mono', monospace; text-align: right; }
 .stamp {
   margin-top: 16px; display: inline-flex; align-items: center; gap: 9px;
-  background: linear-gradient(135deg, var(--flag), #c1503f); color: #fff; border-radius: 20px;
-  padding: 7px 15px;
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem; font-weight: 600; letter-spacing: 0.03em;
-  box-shadow: 0 0 14px rgba(168,58,44,0.4);
+  border: 2px solid var(--flag); color: var(--flag);
+  padding: 6px 13px; transform: rotate(-3deg);
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.03em;
 }
 
 /* ================= Section shared ================= */
@@ -154,11 +157,11 @@ section { padding: 44px 0; }
 @media (max-width: 640px) { section { padding: 30px 0; } }
 .section-tint { background: var(--paper-alt); }
 
-.section-head { max-width: 62ch; margin-bottom: 24px; }
+.section-head { max-width: 62ch; margin: 0 auto 24px; }
 @media (max-width: 640px) { .section-head { margin-bottom: 18px; } }
-.section-head .eyebrow { display: flex; align-items: center; gap: 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; color: var(--ink-soft); margin-bottom: 10px; letter-spacing: 0.04em; }
+.section-head .eyebrow { display: flex; align-items: center; justify-content: center; gap: 7px; font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; color: var(--ink-soft); margin-bottom: 10px; letter-spacing: 0.04em; }
 
-.title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.title-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
 .title-icon {
   flex-shrink: 0; width: 38px; height: 38px; border-radius: 11px;
   display: flex; align-items: center; justify-content: center;
@@ -190,7 +193,7 @@ section { padding: 44px 0; }
 .filelogo.sm { width: 22px; height: 25px; font-size: 0.42rem; border-radius: 4px; }
 .filelogo.sm::after { border-width: 0 6px 6px 0; }
 
-.format-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.format-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
 .format-chip {
   display: flex; align-items: center; gap: 8px; background: var(--paper);
   border: 1px solid var(--line); border-radius: 20px; padding: 6px 12px 6px 6px;
@@ -211,16 +214,21 @@ section { padding: 44px 0; }
 .tool-shell:hover, .conv-shell:hover { border-color: var(--border-accent-hover); }
 
 .card-hdr {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-  padding: 14px 18px; border-bottom: 1px solid var(--border-accent);
-  background: linear-gradient(90deg, rgba(168,58,44,0.06), transparent 65%);
+  padding: 16px 18px 14px; border-bottom: 1px solid var(--border-accent);
+  background: linear-gradient(180deg, rgba(168,58,44,0.07), transparent 100%);
+  text-align: center;
 }
-.card-hdr .card-title { font-family: 'Newsreader', serif; font-weight: 500; font-size: 1.02rem; display: flex; align-items: center; gap: 8px; }
+.card-hdr .card-title { font-family: 'Newsreader', serif; font-weight: 500; font-size: 1.08rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+.tab-group-row {
+  display: flex; justify-content: center; padding: 12px 16px;
+  border-bottom: 1px solid var(--border-accent); background: var(--paper-alt);
+}
 
 /* ================= Pill tab-group (detector + converters) ================= */
 .tab-group {
-  display: flex; gap: 3px; background: var(--paper-alt); border-radius: 10px; padding: 3px;
-  flex-wrap: wrap;
+  display: flex; gap: 4px; background: var(--paper); border-radius: 10px; padding: 4px;
+  flex-wrap: wrap; justify-content: center; border: 1px solid var(--line);
 }
 .tab-btn, .conv-tab {
   display: flex; align-items: center; gap: 6px;

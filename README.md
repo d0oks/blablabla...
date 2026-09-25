@@ -24,7 +24,8 @@ Tout est à plat exprès, pour que l'upload sur GitHub via l'interface web
 
 - **Détecteur de texte** : heuristique locale, tourne dans le navigateur.
 - **Tous les convertisseurs** : image ↔ format, images → PDF, PDF → images,
-  Word → PDF, PDF → Word. Aucun serveur, aucune clé, gratuit et privé.
+  Word → PDF, PDF → Word, ePub → PDF. Aucun serveur, aucune clé, gratuit et
+  privé.
 
 ## Ce qui reste en mode démo
 
@@ -58,5 +59,8 @@ en haut d'`index.html`.
 - `Word → PDF` rend le document sous forme d'image — le texte n'est pas
   sélectionnable dans le PDF généré.
 - `PDF → Word` extrait le texte brut sans reconstruire la mise en page.
+- `ePub → PDF` lit les chapitres dans l'ordre du livre et intègre les images,
+  mais applique une mise en page simplifiée (une seule colonne, police par
+  défaut) plutôt que le style d'origine de l'ePub.
 - Les gros fichiers peuvent être lents à traiter, tout tourne dans le
   navigateur du visiteur.

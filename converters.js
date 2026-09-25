@@ -330,4 +330,137 @@
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  // -------------------------------------------------------------------
+  // 6. ePub → PDF
+  // -------------------------------------------------------------------
+  var epub2pdfZone = setupDropZone('drop-epub2pdf', 'file-epub2pdf', 'list-epub2pdf', {
+    multiple: false,
+    onChange: function (files) {
+      document.getElementById('btn-epub2pdf').disabled = files.length === 0;
+    }
+  });
+
+  function resolveZipPath(baseDir, relHref) {
+    var base = 'https://z/' + (baseDir ? baseDir + '/' : '');
+    var url = new URL(relHref.split('#')[0], base);
+    return decodeURIComponent(url.pathname.replace(/^\//, ''));
+  }
+  function dirname(path) {
+    var i = path.lastIndexOf('/');
+    return i === -1 ? '' : path.substring(0, i);
+  }
+
+  document.getElementById('btn-epub2pdf').addEventListener('click', function () {
+    var file = epub2pdfZone.getFiles()[0];
+    if (!file) return;
+    setStatus('status-epub2pdf', 'Ouverture de l\'ePub…');
+
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      JSZip.loadAsync(e.target.result).then(function (zip) {
+
+        // 1. container.xml → chemin du fichier .opf
+        return zip.file('META-INF/container.xml').async('string').then(function (containerXml) {
+          var containerDoc = new DOMParser().parseFromString(containerXml, 'application/xml');
+          var rootfile = containerDoc.querySelector('rootfile');
+          var opfPath = rootfile.getAttribute('full-path');
+          var opfDir = dirname(opfPath);
+
+          // 2. le .opf → manifeste (id → href) + ordre de lecture (spine)
+          return zip.file(opfPath).async('string').then(function (opfXml) {
+            var opfDoc = new DOMParser().parseFromString(opfXml, 'application/xml');
+            var manifest = {};
+            opfDoc.querySelectorAll('manifest item').forEach(function (item) {
+              manifest[item.getAttribute('id')] = {
+                href: item.getAttribute('href'),
+                type: item.getAttribute('media-type')
+              };
+            });
+            var spineHrefs = [];
+            opfDoc.querySelectorAll('spine itemref').forEach(function (ref) {
+              var idref = ref.getAttribute('idref');
+              if (manifest[idref]) spineHrefs.push(resolveZipPath(opfDir, manifest[idref].href));
+            });
+
+            var titleEl = opfDoc.querySelector('metadata > *[*|creator], metadata title');
+            var bookTitle = (opfDoc.querySelector('metadata title') || {}).textContent || file.name.replace(/\.epub$/i, '');
+
+            setStatus('status-epub2pdf', 'Lecture de ' + spineHrefs.length + ' chapitre(s)…');
+
+            // 3. charge chaque chapitre en HTML, en intégrant ses images en base64
+            var chapterPromises = spineHrefs.map(function (chapPath) {
+              var chapDir = dirname(chapPath);
+              return zip.file(chapPath).async('string').then(function (html) {
+                var doc = new DOMParser().parseFromString(html, 'text/html');
+                var imgs = Array.from(doc.querySelectorAll('img, image'));
+                var imgPromises = imgs.map(function (img) {
+                  var srcAttr = img.tagName.toLowerCase() === 'image' ? 'href' : 'src';
+                  var src = img.getAttribute(srcAttr) || img.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+                  if (!src || src.indexOf('data:') === 0) return Promise.resolve();
+                  var imgPath = resolveZipPath(chapDir, src);
+                  var zf = zip.file(imgPath);
+                  if (!zf) return Promise.resolve();
+                  return zf.async('base64').then(function (b64) {
+                    var ext = imgPath.split('.').pop().toLowerCase();
+                    var mime = ext === 'png' ? 'image/png' : (ext === 'gif' ? 'image/gif' : 'image/jpeg');
+                    img.setAttribute(srcAttr, 'data:' + mime + ';base64,' + b64);
+                  }).catch(function () {});
+                });
+                return Promise.all(imgPromises).then(function () {
+                  return doc.body ? doc.body.innerHTML : '';
+                });
+              }).catch(function () { return ''; });
+            });
+
+            return Promise.all(chapterPromises).then(function (chapters) {
+              return { chapters: chapters, title: bookTitle };
+            });
+          });
+        });
+      }).then(function (book) {
+        setStatus('status-epub2pdf', 'Mise en page…');
+        var holder = document.createElement('div');
+        holder.style.cssText = 'position:fixed; left:-9999px; top:0; width:700px; padding:36px; background:#fff; font-family:Georgia,serif; font-size:14px; line-height:1.7; color:#111;';
+        holder.innerHTML = book.chapters.map(function (html, i) {
+          return '<div style="' + (i > 0 ? 'page-break-before:always;' : '') + '">' + html + '</div>';
+        }).join('');
+        holder.querySelectorAll('img').forEach(function (img) {
+          img.style.maxWidth = '100%';
+        });
+        document.body.appendChild(holder);
+
+        return html2canvas(holder, { scale: 2, useCORS: true }).then(function (canvas) {
+          document.body.removeChild(holder);
+          var jsPDF = window.jspdf.jsPDF;
+          var doc = new jsPDF({ unit: 'pt', format: 'a4' });
+          var pageW = doc.internal.pageSize.getWidth();
+          var pageH = doc.internal.pageSize.getHeight();
+          var imgW = pageW;
+          var imgH = (canvas.height * imgW) / canvas.width;
+          var heightLeft = imgH;
+          var position = 0;
+          var imgData = canvas.toDataURL('image/jpeg', 0.9);
+
+          doc.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
+          heightLeft -= pageH;
+          while (heightLeft > 0) {
+            position = heightLeft - imgH;
+            doc.addPage();
+            doc.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
+            heightLeft -= pageH;
+          }
+
+          var blob = doc.output('blob');
+          var url = URL.createObjectURL(blob);
+          setStatus('status-epub2pdf', 'Terminé — ' + book.chapters.length + ' chapitre(s)');
+          showDownload('download-epub2pdf', url, file.name.replace(/\.epub$/i, '') + '.pdf');
+        });
+      }).catch(function (err) {
+        setStatus('status-epub2pdf', 'Erreur : fichier .epub illisible ou non standard');
+        console.error(err);
+      });
+    };
+    reader.readAsArrayBuffer(file);
+  });
+
 })();

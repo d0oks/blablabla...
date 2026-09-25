@@ -77,6 +77,8 @@
       <div class="tool-shell">
         <div class="card-hdr">
           <span class="card-title">Analyse en trois volets</span>
+        </div>
+        <div class="tab-group-row">
           <div class="tab-group">
             <button class="tab-btn active" data-tab="texte">
               <span class="filetag txt">TXT</span>
@@ -170,13 +172,15 @@
           <span class="format-chip"><span class="filelogo sm pdf">PDF</span>PDF</span>
           <span class="format-chip"><span class="filelogo sm doc">DOC</span>Word</span>
           <span class="format-chip"><span class="filelogo sm img">PNG</span>PNG / JPG / WebP</span>
-          <span class="format-chip"><span class="filelogo sm epub">EPUB</span>ePub <span class="soon">(bientôt)</span></span>
+          <span class="format-chip"><span class="filelogo sm epub">EPUB</span>ePub</span>
         </div>
       </div>
 
       <div class="conv-shell">
         <div class="card-hdr">
           <span class="card-title">Boîte à outils</span>
+        </div>
+        <div class="tab-group-row">
           <div class="tab-group">
             <button class="conv-tab active" data-conv="img">
               <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">⇄</span><span class="filetag img">IMG</span></span>
@@ -197,6 +201,10 @@
             <button class="conv-tab" data-conv="pdf2word">
               <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag doc">DOC</span></span>
               <span class="tab-label">PDF→Word</span>
+            </button>
+            <button class="conv-tab" data-conv="epub2pdf">
+              <span class="tab-icon-row"><span class="filetag epub">EPUB</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
+              <span class="tab-label">ePub→PDF</span>
             </button>
           </div>
         </div>
@@ -272,6 +280,18 @@
             <span class="conv-status" id="status-pdf2word"></span>
           </div>
           <div class="conv-download" id="download-pdf2word"></div>
+        </div>
+
+        <div class="conv-panel" id="conv-panel-epub2pdf">
+          <p class="conv-desc">Convertit un livre ePub en PDF, chapitre par chapitre, images comprises. Mise en page simplifiée par rapport à une liseuse dédiée.</p>
+          <div class="conv-drop" id="drop-epub2pdf">Dépose un fichier .epub ou clique</div>
+          <input type="file" accept=".epub" id="file-epub2pdf" style="display:none">
+          <div class="conv-filelist" id="list-epub2pdf"></div>
+          <div class="conv-actions">
+            <button class="conv-btn" id="btn-epub2pdf" disabled>Convertir en PDF</button>
+            <span class="conv-status" id="status-epub2pdf"></span>
+          </div>
+          <div class="conv-download" id="download-epub2pdf"></div>
         </div>
       </div>
     </div>
