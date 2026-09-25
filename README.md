@@ -1,66 +1,62 @@
-# Blablabla — Backend de détection
+# Blablabla
 
-Ce petit serveur reçoit les fichiers image/vidéo depuis le site, les transmet
-à Hive Moderation (ou un autre fournisseur), et renvoie uniquement le score —
-sans jamais exposer ta clé API au navigateur.
+Outil gratuit pour les recruteurs : détecte les traces de génération par IA
+dans un texte, une photo ou une vidéo de candidature, et convertit des
+fichiers (image / PDF / Word) sans rien installer.
 
-## 1. Obtenir une clé API
+## Fichiers (tous à la racine, aucun sous-dossier)
 
-- **Hive Moderation** : https://thehive.ai — offre l'image, la vidéo et le texte
-  sous une seule API. Compte pro nécessaire pour un usage en production.
-- **Sightengine** : alternative moins chère, bon plan gratuit pour tester.
-- **Sensity** : spécialisé deepfake vidéo, plus cher, plus précis sur ce point précis.
-
-Commence par un compte d'essai chez un seul fournisseur (Hive couvre les trois
-formats, c'est le plus simple pour démarrer).
-
-## 2. Configurer en local
-
-```bash
-npm install
-cp .env.example .env
-# édite .env et colle ta clé HIVE_API_KEY
-npm start
+```
+index.html      → page principale
+style.css        → tous les styles
+detector.js       → onglets Texte / Photo / Vidéo
+converters.js      → convertisseurs de fichiers
+favicon.svg          → icône de l'onglet
+robots.txt             → indique aux moteurs de recherche quoi explorer
+sitemap.xml              → plan du site pour l'indexation
+404.html                   → page d'erreur GitHub Pages
 ```
 
-Le serveur tourne sur `http://localhost:3000`.
+Tout est à plat exprès, pour que l'upload sur GitHub via l'interface web
+(sans dossiers) fonctionne sans souci.
 
-## 3. Déployer (Render — le plus simple pour démarrer)
+## Ce qui marche tout de suite, sans rien configurer
 
-1. Crée un compte sur render.com
-2. "New Web Service" → connecte ce dossier (ou pousse-le sur un repo GitHub)
-3. Build command : `npm install`
-4. Start command : `npm start`
-5. Dans "Environment", ajoute la variable `HIVE_API_KEY` avec ta vraie clé
-6. Ajoute aussi `ALLOWED_ORIGIN` avec l'URL de ton site publié, pour que seul
-   ton front puisse appeler ce serveur
+- **Détecteur de texte** : heuristique locale, tourne dans le navigateur.
+- **Tous les convertisseurs** : image ↔ format, images → PDF, PDF → images,
+  Word → PDF, PDF → Word. Aucun serveur, aucune clé, gratuit et privé.
 
-Une fois déployé, tu obtiens une URL du type `https://blablabla-backend.onrender.com`.
+## Ce qui reste en mode démo
 
-## 4. Brancher le front dessus
+Le détecteur **photo** et **vidéo** affiche un résultat d'exemple tant
+qu'aucune vraie API de détection (Hive, Sightengine…) n'est branchée
+derrière — ça demande un petit serveur relais, qui est une étape plus
+avancée et n'est pas nécessaire pour que le reste du site fonctionne.
 
-Dans `index.html`, remplace la fonction `runDemo()` par un vrai appel :
+## Déployer sur GitHub Pages (gratuit)
 
-```javascript
-async function analyzeFile(kind, file) {
-  const form = new FormData();
-  form.append('file', file);
-  const res = await fetch('https://blablabla-backend.onrender.com/api/detect-' + kind, {
-    method: 'POST',
-    body: form
-  });
-  return res.json();
-}
-```
+1. Crée un nouveau dépôt sur GitHub, par exemple `blablabla`
+2. **Add file → Upload files**, puis fais glisser tous les fichiers de ce
+   dossier (ou sélectionne-les tous et glisse-les d'un coup — ça marche même
+   sans pouvoir glisser un dossier entier, puisqu'il n'y en a pas ici)
+3. Commit
+4. **Settings → Pages** → Source : **Deploy from a branch** → branche
+   `main`, dossier `/ (root)`
+5. Le site est en ligne après une minute ou deux, à :
+   `https://TON-COMPTE.github.io/blablabla/`
 
-Attention : un fichier HTML publié tel quel sur claude.ai a une politique de
-sécurité qui bloque les appels vers des domaines externes. Pour une vraie mise
-en production, héberge ce front ailleurs (Vercel, Netlify, ou ton propre
-hébergement) une fois le backend prêt — l'aperçu Claude reste idéal pour la
-démonstration et la validation du design, pas pour la version finale en ligne.
+## Avant de déployer
 
-## 5. Coûts à anticiper
+Remplace `TON-COMPTE` par ton vrai nom d'utilisateur GitHub dans
+`sitemap.xml`, `robots.txt`, et les balises `<meta>` / `<link rel="canonical">`
+en haut d'`index.html`.
 
-Les fournisseurs facturent à l'appel (souvent entre 0,001€ et 0,01€ par
-analyse selon le volume). Avant de fixer tes propres tarifs, teste le coût
-réel sur un échantillon de 100 documents pour calculer ta marge.
+## Limites connues
+
+- Le détecteur de texte est une heuristique simple, pas un modèle entraîné :
+  utile comme premier filtre, pas comme preuve.
+- `Word → PDF` rend le document sous forme d'image — le texte n'est pas
+  sélectionnable dans le PDF généré.
+- `PDF → Word` extrait le texte brut sans reconstruire la mise en page.
+- Les gros fichiers peuvent être lents à traiter, tout tourne dans le
+  navigateur du visiteur.
