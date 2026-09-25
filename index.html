@@ -64,25 +64,33 @@
   <section id="outil" class="section-tint">
     <div class="wrap">
       <div class="section-head">
-        <div class="eyebrow"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10" cy="10" r="6.5"/><line x1="14.8" y1="14.8" x2="20.5" y2="20.5"/></svg>LE DÉTECTEUR</div>
-        <h2>Analyse en trois volets</h2>
+        <div class="eyebrow">MODULE 01</div>
+        <div class="title-row">
+          <span class="title-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10" cy="10" r="6.5"/><line x1="14.8" y1="14.8" x2="20.5" y2="20.5"/></svg>
+          </span>
+          <h2>Détecteur</h2>
+        </div>
         <p>Colle un texte, dépose une image ou une vidéo. L'analyse de texte tourne en local dans ton navigateur — les analyses image et vidéo nécessitent une clé API et le backend fourni (voir le README du dépôt).</p>
       </div>
 
       <div class="tool-shell">
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="texte">
-            <span class="filetag txt">TXT</span>
-            <span class="tab-label">Texte</span>
-          </button>
-          <button class="tab-btn" data-tab="photo">
-            <span class="filetag img">IMG</span>
-            <span class="tab-label">Photo</span>
-          </button>
-          <button class="tab-btn" data-tab="video">
-            <span class="filetag vid">VID</span>
-            <span class="tab-label">Vidéo</span>
-          </button>
+        <div class="card-hdr">
+          <span class="card-title">Analyse en trois volets</span>
+          <div class="tab-group">
+            <button class="tab-btn active" data-tab="texte">
+              <span class="filetag txt">TXT</span>
+              <span class="tab-label">Texte</span>
+            </button>
+            <button class="tab-btn" data-tab="photo">
+              <span class="filetag img">IMG</span>
+              <span class="tab-label">Photo</span>
+            </button>
+            <button class="tab-btn" data-tab="video">
+              <span class="filetag vid">VID</span>
+              <span class="tab-label">Vidéo</span>
+            </button>
+          </div>
         </div>
 
         <div class="tab-panel active" id="panel-texte">
@@ -150,33 +158,47 @@
   <section id="convertisseurs">
     <div class="wrap">
       <div class="section-head">
-        <div class="eyebrow"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/></svg>BOÎTE À OUTILS</div>
-        <h2>Convertisseurs de fichiers</h2>
+        <div class="eyebrow">MODULE 02</div>
+        <div class="title-row">
+          <span class="title-icon tint-verified" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/></svg>
+          </span>
+          <h2>Convertisseurs</h2>
+        </div>
         <p>Pratique pour manipuler les documents de candidature (CV en PDF, photos, etc.). Tout se passe dans ton navigateur — aucun fichier n'est envoyé où que ce soit.</p>
+        <div class="format-strip">
+          <span class="format-chip"><span class="filelogo sm pdf">PDF</span>PDF</span>
+          <span class="format-chip"><span class="filelogo sm doc">DOC</span>Word</span>
+          <span class="format-chip"><span class="filelogo sm img">PNG</span>PNG / JPG / WebP</span>
+          <span class="format-chip"><span class="filelogo sm epub">EPUB</span>ePub <span class="soon">(bientôt)</span></span>
+        </div>
       </div>
 
       <div class="conv-shell">
-        <div class="conv-tabs">
-          <button class="conv-tab active" data-conv="img">
-            <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">⇄</span><span class="filetag img">IMG</span></span>
-            <span class="tab-label">Formats</span>
-          </button>
-          <button class="conv-tab" data-conv="imgs2pdf">
-            <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
-            <span class="tab-label">Images → PDF</span>
-          </button>
-          <button class="conv-tab" data-conv="pdf2imgs">
-            <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag img">IMG</span></span>
-            <span class="tab-label">PDF → Images</span>
-          </button>
-          <button class="conv-tab" data-conv="word2pdf">
-            <span class="tab-icon-row"><span class="filetag doc">DOC</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
-            <span class="tab-label">Word → PDF</span>
-          </button>
-          <button class="conv-tab" data-conv="pdf2word">
-            <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag doc">DOC</span></span>
-            <span class="tab-label">PDF → Word</span>
-          </button>
+        <div class="card-hdr">
+          <span class="card-title">Boîte à outils</span>
+          <div class="tab-group">
+            <button class="conv-tab active" data-conv="img">
+              <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">⇄</span><span class="filetag img">IMG</span></span>
+              <span class="tab-label">Formats</span>
+            </button>
+            <button class="conv-tab" data-conv="imgs2pdf">
+              <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
+              <span class="tab-label">Images→PDF</span>
+            </button>
+            <button class="conv-tab" data-conv="pdf2imgs">
+              <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag img">IMG</span></span>
+              <span class="tab-label">PDF→Images</span>
+            </button>
+            <button class="conv-tab" data-conv="word2pdf">
+              <span class="tab-icon-row"><span class="filetag doc">DOC</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
+              <span class="tab-label">Word→PDF</span>
+            </button>
+            <button class="conv-tab" data-conv="pdf2word">
+              <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag doc">DOC</span></span>
+              <span class="tab-label">PDF→Word</span>
+            </button>
+          </div>
         </div>
 
         <div class="conv-panel active" id="conv-panel-img">
