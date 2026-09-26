@@ -11,6 +11,7 @@ index.html      → page principale
 style.css        → tous les styles
 detector.js       → onglets Texte / Photo / Vidéo
 converters.js      → convertisseurs de fichiers
+tools.js            → 6 outils : mèmes, bruit blanc, CV/lettre, lien direct, GIF, QR code
 favicon.svg          → icône de l'onglet
 robots.txt             → indique aux moteurs de recherche quoi explorer
 sitemap.xml              → plan du site pour l'indexation
@@ -62,5 +63,14 @@ en haut d'`index.html`.
 - `ePub → PDF` lit les chapitres dans l'ordre du livre et intègre les images,
   mais applique une mise en page simplifiée (une seule colonne, police par
   défaut) plutôt que le style d'origine de l'ePub.
+- Le **téléchargeur de lien direct** ne fonctionne que si le serveur cible
+  autorise les requêtes multi-domaine (CORS) — beaucoup de sites le
+  bloquent. Il ne contourne pas les protections de YouTube/Instagram/TikTok,
+  et ce n'est pas son but.
+- Le **GIF depuis vidéo** charge son encodeur (gif.js) depuis un CDN au
+  premier usage — nécessite d'être en ligne. Limité à 6 secondes pour
+  rester rapide dans le navigateur.
+- Le **CV/lettre** génère une mise en page simple et propre, pas un design
+  à onglets multiples ni des modèles graphiques élaborés.
 - Les gros fichiers peuvent être lents à traiter, tout tourne dans le
   navigateur du visiteur.

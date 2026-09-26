@@ -230,24 +230,55 @@ section { padding: 44px 0; }
   display: flex; gap: 4px; background: var(--paper); border-radius: 10px; padding: 4px;
   flex-wrap: wrap; justify-content: center; border: 1px solid var(--line);
 }
-.tab-btn, .conv-tab {
+.tab-btn, .conv-tab, .tool-tab-btn {
   display: flex; align-items: center; gap: 6px;
   font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; font-weight: 600;
   padding: 7px 11px; border-radius: 8px; border: none; background: none; color: var(--ink-soft);
   cursor: pointer; transition: all 0.2s; white-space: nowrap;
 }
-.tab-btn:hover:not(.active), .conv-tab:hover:not(.active) { color: var(--ink); }
-.tab-btn.active, .conv-tab.active {
+.tab-btn:hover:not(.active), .conv-tab:hover:not(.active), .tool-tab-btn:hover:not(.active) { color: var(--ink); }
+.tab-btn.active, .conv-tab.active, .tool-tab-btn.active {
   background: linear-gradient(135deg, var(--flag), #c1503f); color: #fff;
   box-shadow: 0 0 12px rgba(168,58,44,0.4);
 }
-.tab-btn .filetag, .conv-tab .filetag { width: 20px; height: 23px; font-size: 0.4rem; border-radius: 3px; }
-.tab-btn.active .filetag, .conv-tab.active .filetag { background: rgba(255,255,255,0.25); }
+.tab-btn .filetag, .conv-tab .filetag, .tool-tab-btn .filetag { width: 30px; height: 20px; font-size: 0.44rem; border-radius: 4px; }
+.tab-btn.active .filetag, .conv-tab.active .filetag, .tool-tab-btn.active .filetag { background: rgba(255,255,255,0.25); }
+
+/* ================= Autres outils (6 mini-outils) ================= */
+.tab-panel2 { display: none; padding: 22px; }
+@media (max-width: 640px) { .tab-panel2 { padding: 16px; } }
+.tab-panel2.active { display: block; }
+
+.tool-text-input, .tool-textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--paper); font-family: 'IBM Plex Sans', sans-serif; font-size: 0.92rem; color: var(--ink);
+  text-align: left;
+}
+.tool-textarea { resize: vertical; line-height: 1.5; }
+.tool-text-input:focus, .tool-textarea:focus { outline: 2px solid var(--flag); outline-offset: -1px; }
+.tool-canvas { max-width: 100%; border-radius: 10px; margin-top: 14px; border: 1px solid var(--line); }
 
 .tab-panel, .conv-panel { display: none; padding: 22px; }
 @media (max-width: 640px) { .tab-panel, .conv-panel { padding: 16px; } }
 .tab-panel.active, .conv-panel.active { display: block; }
 .conv-panel .conv-desc { font-size: 0.9rem; color: var(--ink-soft); margin: 0 0 16px; }
+
+/* ================= Unified converter flow (source → target dropdowns) ================= */
+.conv-shell-compact { max-width: 480px; margin: 0 auto; }
+.conv-field { margin-bottom: 4px; }
+.conv-field-label {
+  display: block; font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; letter-spacing: 0.05em;
+  color: var(--ink-soft); margin-bottom: 6px; text-align: left;
+}
+.conv-field select {
+  width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--paper-alt); font-family: 'IBM Plex Sans', sans-serif; font-size: 0.94rem; color: var(--ink);
+  text-align: left; cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235A5346' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
+}
+.conv-swap-arrow { text-align: center; color: var(--ink-soft); font-size: 1rem; margin: 8px 0; }
+#conv-panel-unified .conv-drop { margin-top: 16px; }
 
 textarea.ta {
   width: 100%; min-height: 140px; resize: vertical;

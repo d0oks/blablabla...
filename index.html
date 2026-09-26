@@ -28,6 +28,7 @@
       <nav class="top">
         <a href="#outil">Détecteur</a>
         <a href="#convertisseurs">Convertisseurs</a>
+        <a href="#autres-outils">Autres outils</a>
       </nav>
       <span class="free-pill">100% GRATUIT</span>
       <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-label="Ouvrir le menu">
@@ -39,6 +40,7 @@
     <div class="mobile-nav-inner">
       <a href="#outil">Détecteur</a>
       <a href="#convertisseurs">Convertisseurs</a>
+      <a href="#autres-outils">Autres outils</a>
     </div>
   </div>
 </header>
@@ -176,127 +178,233 @@
         </div>
       </div>
 
-      <div class="conv-shell">
+      <div class="conv-shell conv-shell-compact">
         <div class="card-hdr">
           <span class="card-title">Boîte à outils</span>
         </div>
-        <div class="tab-group-row">
-          <div class="tab-group">
-            <button class="conv-tab active" data-conv="img">
-              <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">⇄</span><span class="filetag img">IMG</span></span>
-              <span class="tab-label">Formats</span>
-            </button>
-            <button class="conv-tab" data-conv="imgs2pdf">
-              <span class="tab-icon-row"><span class="filetag img">IMG</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
-              <span class="tab-label">Images→PDF</span>
-            </button>
-            <button class="conv-tab" data-conv="pdf2imgs">
-              <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag img">IMG</span></span>
-              <span class="tab-label">PDF→Images</span>
-            </button>
-            <button class="conv-tab" data-conv="word2pdf">
-              <span class="tab-icon-row"><span class="filetag doc">DOC</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
-              <span class="tab-label">Word→PDF</span>
-            </button>
-            <button class="conv-tab" data-conv="pdf2word">
-              <span class="tab-icon-row"><span class="filetag pdf">PDF</span><span class="conv-arrow">→</span><span class="filetag doc">DOC</span></span>
-              <span class="tab-label">PDF→Word</span>
-            </button>
-            <button class="conv-tab" data-conv="epub2pdf">
-              <span class="tab-icon-row"><span class="filetag epub">EPUB</span><span class="conv-arrow">→</span><span class="filetag pdf">PDF</span></span>
-              <span class="tab-label">ePub→PDF</span>
-            </button>
-          </div>
-        </div>
+        <div class="conv-panel active" id="conv-panel-unified">
+          <p class="conv-desc">Choisis un format source, un format cible, et dépose ton fichier. Tout se passe dans ton navigateur, rien n'est envoyé.</p>
 
-        <div class="conv-panel active" id="conv-panel-img">
-          <p class="conv-desc">Change le format d'une image (PNG, JPG, WebP) et ajuste sa qualité.</p>
-          <div class="conv-drop" id="drop-img-conv">Dépose une image ou clique</div>
-          <input type="file" accept="image/*" id="file-img-conv" style="display:none">
-          <div class="conv-filelist" id="list-img-conv"></div>
-          <div class="conv-options">
-            <label>Format :
-              <select id="img-conv-format">
-                <option value="image/png">PNG</option>
-                <option value="image/jpeg" selected>JPG</option>
-                <option value="image/webp">WebP</option>
-              </select>
-            </label>
-            <span class="conv-options" id="img-conv-quality-wrap" style="display:flex;">
-              <label for="img-conv-quality">Qualité</label>
-              <input type="range" id="img-conv-quality" min="30" max="100" value="85">
-            </span>
+          <div class="conv-field">
+            <label class="conv-field-label">Je pars de</label>
+            <select id="conv-source">
+              <option value="image">Image (JPG, PNG, WebP)</option>
+              <option value="pdf">PDF</option>
+              <option value="word">Word (.docx)</option>
+              <option value="epub">ePub</option>
+            </select>
           </div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="btn-img-conv" disabled>Convertir</button>
-            <span class="conv-status" id="status-img-conv"></span>
-          </div>
-          <div class="conv-download" id="download-img-conv"></div>
-        </div>
 
-        <div class="conv-panel" id="conv-panel-imgs2pdf">
-          <p class="conv-desc">Assemble plusieurs images en un seul PDF, une par page.</p>
-          <div class="conv-drop" id="drop-imgs2pdf">Dépose une ou plusieurs images, ou clique</div>
-          <input type="file" accept="image/*" id="file-imgs2pdf" multiple style="display:none">
-          <div class="conv-filelist" id="list-imgs2pdf"></div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="btn-imgs2pdf" disabled>Créer le PDF</button>
-            <span class="conv-status" id="status-imgs2pdf"></span>
-          </div>
-          <div class="conv-download" id="download-imgs2pdf"></div>
-        </div>
+          <div class="conv-swap-arrow">↓</div>
 
-        <div class="conv-panel" id="conv-panel-pdf2imgs">
-          <p class="conv-desc">Exporte chaque page d'un PDF en image PNG, regroupées dans un .zip.</p>
-          <div class="conv-drop" id="drop-pdf2imgs">Dépose un PDF ou clique</div>
-          <input type="file" accept="application/pdf" id="file-pdf2imgs" style="display:none">
-          <div class="conv-filelist" id="list-pdf2imgs"></div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="btn-pdf2imgs" disabled>Extraire les pages</button>
-            <span class="conv-status" id="status-pdf2imgs"></span>
+          <div class="conv-field">
+            <label class="conv-field-label">Et je veux</label>
+            <select id="conv-target"></select>
           </div>
-          <div class="conv-download" id="download-pdf2imgs"></div>
-        </div>
 
-        <div class="conv-panel" id="conv-panel-word2pdf">
-          <p class="conv-desc">Convertit un document Word en PDF. Fonctionne bien pour du texte simple ; les mises en page complexes peuvent varier légèrement.</p>
-          <div class="conv-drop" id="drop-word2pdf">Dépose un .docx ou clique</div>
-          <input type="file" accept=".docx" id="file-word2pdf" style="display:none">
-          <div class="conv-filelist" id="list-word2pdf"></div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="btn-word2pdf" disabled>Convertir en PDF</button>
-            <span class="conv-status" id="status-word2pdf"></span>
-          </div>
-          <div class="conv-download" id="download-word2pdf"></div>
-        </div>
+          <div id="conv-extra-options"></div>
 
-        <div class="conv-panel" id="conv-panel-pdf2word">
-          <p class="conv-desc">Extrait le texte d'un PDF dans un fichier .doc modifiable. Mise en forme simplifiée : c'est le texte brut, pas une reconstruction fidèle de la mise en page.</p>
-          <div class="conv-drop" id="drop-pdf2word">Dépose un PDF ou clique</div>
-          <input type="file" accept="application/pdf" id="file-pdf2word" style="display:none">
-          <div class="conv-filelist" id="list-pdf2word"></div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="btn-pdf2word" disabled>Convertir en Word</button>
-            <span class="conv-status" id="status-pdf2word"></span>
+          <div class="conv-drop" id="conv-drop-unified">
+            Dépose ton fichier ici
+            <div class="sub">ou clique pour parcourir</div>
           </div>
-          <div class="conv-download" id="download-pdf2word"></div>
-        </div>
+          <input type="file" id="conv-file-unified" style="display:none">
+          <div class="conv-filelist" id="conv-filelist-unified"></div>
 
-        <div class="conv-panel" id="conv-panel-epub2pdf">
-          <p class="conv-desc">Convertit un livre ePub en PDF, chapitre par chapitre, images comprises. Mise en page simplifiée par rapport à une liseuse dédiée.</p>
-          <div class="conv-drop" id="drop-epub2pdf">Dépose un fichier .epub ou clique</div>
-          <input type="file" accept=".epub" id="file-epub2pdf" style="display:none">
-          <div class="conv-filelist" id="list-epub2pdf"></div>
           <div class="conv-actions">
-            <button class="conv-btn" id="btn-epub2pdf" disabled>Convertir en PDF</button>
-            <span class="conv-status" id="status-epub2pdf"></span>
+            <button class="conv-btn" id="conv-btn-unified" disabled>Convertir</button>
+            <span class="conv-status" id="conv-status-unified"></span>
           </div>
-          <div class="conv-download" id="download-epub2pdf"></div>
+          <div class="conv-download" id="conv-download-unified"></div>
         </div>
       </div>
     </div>
   </section>
 
+  <section id="autres-outils" class="section-tint">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">MODULE 03</div>
+        <div class="title-row">
+          <span class="title-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </span>
+          <h2>Autres outils</h2>
+        </div>
+        <p>Six petits outils du quotidien, gratuits, sans compte, qui tournent dans ton navigateur.</p>
+      </div>
+
+      <div class="tool-shell">
+        <div class="card-hdr">
+          <span class="card-title" id="tools-card-title">Générateur de mèmes</span>
+        </div>
+        <div class="tab-group-row">
+          <div class="tab-group">
+            <button class="tool-tab-btn active" data-tab2="meme">
+              <span class="filetag img">MEME</span>
+            </button>
+            <button class="tool-tab-btn" data-tab2="noise">
+              <span class="filetag vid">SON</span>
+            </button>
+            <button class="tool-tab-btn" data-tab2="cv">
+              <span class="filetag doc">CV</span>
+            </button>
+            <button class="tool-tab-btn" data-tab2="url">
+              <span class="filetag txt">URL</span>
+            </button>
+            <button class="tool-tab-btn" data-tab2="gif">
+              <span class="filetag epub">GIF</span>
+            </button>
+            <button class="tool-tab-btn" data-tab2="qr">
+              <span class="filetag pdf">QR</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ===== 1. Générateur de mèmes ===== -->
+        <div class="tab-panel2 active" id="tool-panel-meme">
+          <p class="conv-desc">Dépose une image, ajoute un texte en haut et en bas, télécharge ton mème.</p>
+          <div class="conv-drop" id="meme-drop">Dépose une image ou clique</div>
+          <input type="file" accept="image/*" id="meme-file" style="display:none">
+          <div class="conv-field" style="margin-top:14px;">
+            <label class="conv-field-label">Texte du haut</label>
+            <input type="text" id="meme-top" class="tool-text-input" maxlength="80" placeholder="TEXTE DU HAUT">
+          </div>
+          <div class="conv-field" style="margin-top:10px;">
+            <label class="conv-field-label">Texte du bas</label>
+            <input type="text" id="meme-bottom" class="tool-text-input" maxlength="80" placeholder="TEXTE DU BAS">
+          </div>
+          <canvas id="meme-canvas" class="tool-canvas" style="display:none;"></canvas>
+          <div class="conv-actions">
+            <button class="conv-btn" id="meme-btn" disabled>Générer le mème</button>
+            <span class="conv-status" id="meme-status"></span>
+          </div>
+          <div class="conv-download" id="meme-download"></div>
+        </div>
+
+        <!-- ===== 2. Générateur de bruit blanc ===== -->
+        <div class="tab-panel2" id="tool-panel-noise">
+          <p class="conv-desc">Bruit blanc, rose ou brun en continu — pour se concentrer, dormir, ou couvrir un bruit ambiant.</p>
+          <div class="conv-field">
+            <label class="conv-field-label">Type de bruit</label>
+            <select id="noise-type">
+              <option value="white">Blanc — le plus aigu, uniforme</option>
+              <option value="pink">Rose — plus doux, équilibré</option>
+              <option value="brown">Brun — grave, profond</option>
+            </select>
+          </div>
+          <div class="conv-field" style="margin-top:14px;">
+            <label class="conv-field-label">Volume</label>
+            <input type="range" id="noise-volume" min="0" max="100" value="50" style="width:100%;">
+          </div>
+          <div class="conv-field" style="margin-top:14px;">
+            <label class="conv-field-label">Arrêt automatique</label>
+            <select id="noise-timer">
+              <option value="0">Continu</option>
+              <option value="900">15 minutes</option>
+              <option value="1800">30 minutes</option>
+              <option value="3600">1 heure</option>
+            </select>
+          </div>
+          <div class="conv-actions">
+            <button class="conv-btn" id="noise-btn">▶ Lancer</button>
+            <span class="conv-status" id="noise-status"></span>
+          </div>
+        </div>
+
+        <!-- ===== 3. Créateur de CV & lettre ===== -->
+        <div class="tab-panel2" id="tool-panel-cv">
+          <p class="conv-desc">Remplis le formulaire, télécharge un PDF propre et prêt à envoyer.</p>
+          <div class="conv-field">
+            <label class="conv-field-label">Type de document</label>
+            <select id="cv-type">
+              <option value="cv">CV</option>
+              <option value="lettre">Lettre de motivation</option>
+            </select>
+          </div>
+
+          <div id="cv-fields-cv" style="margin-top:14px;">
+            <div class="conv-field"><label class="conv-field-label">Nom complet</label><input type="text" id="cv-name" class="tool-text-input" placeholder="Jeanne Dupont"></div>
+            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Titre / poste visé</label><input type="text" id="cv-title" class="tool-text-input" placeholder="Développeuse web"></div>
+            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Contact (email · téléphone · ville)</label><input type="text" id="cv-contact" class="tool-text-input" placeholder="jeanne@email.com · 06 12 34 56 78 · Lyon"></div>
+            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Expérience (une ligne par poste)</label><textarea id="cv-experience" class="tool-textarea" rows="4" placeholder="Développeuse — ACME Corp — 2022-2024 : refonte du site principal, +30% de vitesse de chargement"></textarea></div>
+            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Formation (une ligne par diplôme)</label><textarea id="cv-education" class="tool-textarea" rows="3" placeholder="Master Informatique — Université de Lyon — 2022"></textarea></div>
+            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Compétences (séparées par des virgules)</label><input type="text" id="cv-skills" class="tool-text-input" placeholder="JavaScript, React, Node.js, SQL"></div>
+          </div>
+
+          <div id="cv-fields-lettre" style="display:none; margin-top:14px;">
+            <div class="conv-field"><label class="conv-field-label">Votre nom</label><input type="text" id="lettre-name" class="tool-text-input" placeholder="Jeanne Dupont"></div>
+            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Destinataire</label><input type="text" id="lettre-dest" class="tool-text-input" placeholder="M. le Directeur des Ressources Humaines"></div>
+            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Objet</label><input type="text" id="lettre-objet" class="tool-text-input" placeholder="Candidature au poste de développeuse web"></div>
+            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Corps de la lettre</label><textarea id="lettre-body" class="tool-textarea" rows="8" placeholder="Madame, Monsieur,&#10;&#10;Je me permets de vous adresser ma candidature..."></textarea></div>
+          </div>
+
+          <div class="conv-actions">
+            <button class="conv-btn" id="cv-btn">Générer le PDF</button>
+            <span class="conv-status" id="cv-status"></span>
+          </div>
+          <div class="conv-download" id="cv-download"></div>
+        </div>
+
+        <!-- ===== 4. Téléchargeur de lien direct ===== -->
+        <div class="tab-panel2" id="tool-panel-url">
+          <p class="conv-desc">Colle le lien direct d'un fichier (se terminant par une extension comme .mp4, .pdf, .jpg) pour le télécharger proprement.</p>
+          <div class="conv-field">
+            <label class="conv-field-label">Lien direct du fichier</label>
+            <input type="text" id="url-input" class="tool-text-input" placeholder="https://exemple.com/fichier.mp4">
+          </div>
+          <div class="conv-actions">
+            <button class="conv-btn" id="url-btn">Télécharger</button>
+            <span class="conv-status" id="url-status"></span>
+          </div>
+          <div class="conv-download" id="url-download"></div>
+          <div class="disclaimer">Fonctionne pour les liens directs vers un fichier hébergé sur un serveur qui autorise le téléchargement multi-domaine (CORS). Certains sites le bloquent — dans ce cas, un clic droit sur le lien d'origine → « Enregistrer le lien sous » fonctionne toujours. Cet outil ne télécharge pas de vidéos YouTube, Instagram ou TikTok.</div>
+        </div>
+
+        <!-- ===== 5. GIF depuis une vidéo ===== -->
+        <div class="tab-panel2" id="tool-panel-gif">
+          <p class="conv-desc">Dépose une courte vidéo, choisis un extrait, obtiens un GIF animé.</p>
+          <div class="conv-drop" id="gif-drop">Dépose une vidéo ou clique</div>
+          <input type="file" accept="video/*" id="gif-file" style="display:none">
+          <video id="gif-preview" style="display:none; width:100%; margin-top:12px; border-radius:10px;" muted playsinline></video>
+          <div class="conv-options" style="margin-top:14px;">
+            <label>Début (s) <input type="number" id="gif-start" min="0" value="0" step="0.5" style="width:60px; margin-left:4px;"></label>
+            <label>Durée (s, max 6) <input type="number" id="gif-duration" min="0.5" max="6" value="3" step="0.5" style="width:60px; margin-left:4px;"></label>
+            <label>Images/s <select id="gif-fps"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option></select></label>
+          </div>
+          <div class="conv-actions">
+            <button class="conv-btn" id="gif-btn" disabled>Générer le GIF</button>
+            <span class="conv-status" id="gif-status"></span>
+          </div>
+          <div class="conv-download" id="gif-download"></div>
+        </div>
+
+        <!-- ===== 6. Générateur de QR code ===== -->
+        <div class="tab-panel2" id="tool-panel-qr">
+          <p class="conv-desc">Texte ou lien → QR code téléchargeable en PNG.</p>
+          <div class="conv-field">
+            <label class="conv-field-label">Texte ou URL</label>
+            <input type="text" id="qr-input" class="tool-text-input" placeholder="https://exemple.com">
+          </div>
+          <div class="conv-field" style="margin-top:14px;">
+            <label class="conv-field-label">Taille</label>
+            <select id="qr-size">
+              <option value="200">Petit (200px)</option>
+              <option value="400" selected>Moyen (400px)</option>
+              <option value="800">Grand (800px)</option>
+            </select>
+          </div>
+          <div id="qr-render" style="display:none; margin-top:16px; text-align:center;"></div>
+          <div class="conv-actions">
+            <button class="conv-btn" id="qr-btn">Générer le QR code</button>
+            <span class="conv-status" id="qr-status"></span>
+          </div>
+          <div class="conv-download" id="qr-download"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
   </main>
 
 <footer>
@@ -306,6 +414,7 @@
       <nav class="top">
         <a href="#outil">Détecteur</a>
         <a href="#convertisseurs">Convertisseurs</a>
+        <a href="#autres-outils">Autres outils</a>
       </nav>
     </div>
     <p class="fine">Blablabla est une aide à la décision, pas une preuve. Même les meilleurs détecteurs ont des taux d'erreur réels — traite chaque résultat comme un signal à vérifier humainement, jamais comme un verdict automatique. Les conversions de fichiers se font entièrement dans ton navigateur ; aucun document n'est envoyé à un serveur.</p>
@@ -318,6 +427,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
   // pdf.js a besoin de son worker pour fonctionner
   if (window.pdfjsLib) {
@@ -326,6 +437,7 @@
 </script>
 <script src="detector.js"></script>
 <script src="converters.js"></script>
+<script src="tools.js"></script>
 
 </body>
 </html>

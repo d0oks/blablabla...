@@ -1,194 +1,132 @@
-// converters.js — Convertisseurs image / PDF / Word, 100% côté navigateur.
-// Rien n'est envoyé à un serveur : tout se passe dans l'onglet du visiteur.
+// converters.js — Boîte à outils unifiée : choisis un format source, un
+// format cible, dépose un fichier. 100% côté navigateur, rien n'est envoyé.
 (function () {
-
-  // ---- Converter tabs (single tool visible at a time, saves scroll on mobile) ----
-  var convTabs = document.querySelectorAll('.conv-tab');
-  var convPanels = document.querySelectorAll('.conv-panel');
-  convTabs.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      convTabs.forEach(function (b) { b.classList.remove('active'); });
-      convPanels.forEach(function (p) { p.classList.remove('active'); });
-      btn.classList.add('active');
-      document.getElementById('conv-panel-' + btn.dataset.conv).classList.add('active');
-    });
-  });
 
   function bytesToSize(bytes) {
     if (bytes < 1024) return bytes + ' o';
     if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' Ko';
     return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
   }
-
-  function setupDropZone(dropId, inputId, listId, opts) {
-    var drop = document.getElementById(dropId);
-    var input = document.getElementById(inputId);
-    var list = document.getElementById(listId);
-    var files = [];
-
-    function render() {
-      list.innerHTML = files.map(function (f) {
-        return '<div>' + f.name + '  ·  ' + bytesToSize(f.size) + '</div>';
-      }).join('');
-      opts.onChange(files);
-    }
-
-    drop.addEventListener('click', function () { input.click(); });
-    input.addEventListener('change', function () {
-      files = opts.multiple ? Array.from(input.files) : [input.files[0]];
-      render();
+  function dirname(path) {
+    var i = path.lastIndexOf('/');
+    return i === -1 ? '' : path.substring(0, i);
+  }
+  function resolveZipPath(baseDir, relHref) {
+    var base = 'https://z/' + (baseDir ? baseDir + '/' : '');
+    var url = new URL(relHref.split('#')[0], base);
+    return decodeURIComponent(url.pathname.replace(/^\//, ''));
+  }
+  function escapeHtml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function readFile(file, as) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function (e) { resolve(e.target.result); };
+      reader.onerror = reject;
+      if (as === 'text') reader.readAsText(file); else reader.readAsArrayBuffer(file);
     });
-    drop.addEventListener('dragover', function (e) { e.preventDefault(); drop.style.borderColor = 'var(--ink-soft)'; });
-    drop.addEventListener('dragleave', function () { drop.style.borderColor = ''; });
-    drop.addEventListener('drop', function (e) {
-      e.preventDefault();
-      drop.style.borderColor = '';
-      var dropped = Array.from(e.dataTransfer.files);
-      files = opts.multiple ? dropped : [dropped[0]];
-      render();
-    });
-
-    return { getFiles: function () { return files; } };
   }
-
-  function showDownload(containerId, url, filename, label) {
-    var box = document.getElementById(containerId);
-    box.innerHTML = '<a href="' + url + '" download="' + filename + '">' + (label || ('Télécharger ' + filename)) + '</a>';
-    box.classList.add('show');
-  }
-
-  function setStatus(id, text) {
-    document.getElementById(id).textContent = text;
-  }
-
-  // -------------------------------------------------------------------
-  // 1. Convertisseur d'image (PNG / JPG / WebP)
-  // -------------------------------------------------------------------
-  var imgZone = setupDropZone('drop-img-conv', 'file-img-conv', 'list-img-conv', {
-    multiple: false,
-    onChange: function (files) {
-      document.getElementById('btn-img-conv').disabled = files.length === 0;
-    }
-  });
-
-  document.getElementById('btn-img-conv').addEventListener('click', function () {
-    var file = imgZone.getFiles()[0];
-    if (!file) return;
-    var format = document.getElementById('img-conv-format').value; // image/png, image/jpeg, image/webp
-    var quality = parseInt(document.getElementById('img-conv-quality').value, 10) / 100;
-    setStatus('status-img-conv', 'Conversion…');
-
-    var img = new Image();
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      img.onload = function () {
-        var canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        var ctx = canvas.getContext('2d');
-        if (format === 'image/jpeg') {
-          ctx.fillStyle = '#FFFFFF';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        ctx.drawImage(img, 0, 0);
-        canvas.toBlob(function (blob) {
-          var ext = format === 'image/png' ? 'png' : (format === 'image/webp' ? 'webp' : 'jpg');
-          var url = URL.createObjectURL(blob);
-          var newName = file.name.replace(/\.[^.]+$/, '') + '.' + ext;
-          setStatus('status-img-conv', bytesToSize(file.size) + ' → ' + bytesToSize(blob.size));
-          showDownload('download-img-conv', url, newName);
-        }, format, format === 'image/png' ? undefined : quality);
+  function readImageAsDataUrl(file) {
+    return new Promise(function (resolve) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var img = new Image();
+        img.onload = function () { resolve({ dataUrl: e.target.result, w: img.naturalWidth, h: img.naturalHeight }); };
+        img.src = e.target.result;
       };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  document.getElementById('img-conv-format').addEventListener('change', function () {
-    var isLossy = this.value !== 'image/png';
-    document.getElementById('img-conv-quality-wrap').style.display = isLossy ? 'flex' : 'none';
-  });
-
-  // -------------------------------------------------------------------
-  // 2. Images → PDF
-  // -------------------------------------------------------------------
-  var imgsToPdfZone = setupDropZone('drop-imgs2pdf', 'file-imgs2pdf', 'list-imgs2pdf', {
-    multiple: true,
-    onChange: function (files) {
-      document.getElementById('btn-imgs2pdf').disabled = files.length === 0;
-    }
-  });
-
-  document.getElementById('btn-imgs2pdf').addEventListener('click', function () {
-    var files = imgsToPdfZone.getFiles();
-    if (!files.length) return;
-    setStatus('status-imgs2pdf', 'Assemblage de ' + files.length + ' image(s)…');
-
-    var jsPDF = window.jspdf.jsPDF;
-    var doc = new jsPDF();
-    var loaded = 0;
-
-    function loadImage(file) {
-      return new Promise(function (resolve) {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          var img = new Image();
-          img.onload = function () { resolve({ dataUrl: e.target.result, w: img.naturalWidth, h: img.naturalHeight }); };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    Promise.all(files.map(loadImage)).then(function (images) {
-      images.forEach(function (imgData, i) {
-        if (i > 0) doc.addPage();
-        var pageW = doc.internal.pageSize.getWidth();
-        var pageH = doc.internal.pageSize.getHeight();
-        var ratio = Math.min(pageW / imgData.w, pageH / imgData.h);
-        var w = imgData.w * ratio;
-        var h = imgData.h * ratio;
-        var x = (pageW - w) / 2;
-        var y = (pageH - h) / 2;
-        var format = imgData.dataUrl.indexOf('image/png') !== -1 ? 'PNG' : 'JPEG';
-        doc.addImage(imgData.dataUrl, format, x, y, w, h);
-      });
-      var blob = doc.output('blob');
-      var url = URL.createObjectURL(blob);
-      setStatus('status-imgs2pdf', 'Terminé — ' + images.length + ' page(s)');
-      showDownload('download-imgs2pdf', url, 'images.pdf');
+      reader.readAsDataURL(file);
     });
-  });
+  }
+  // Rend un bloc HTML en PDF paginé, via html2canvas + jsPDF (utilisé par Word→PDF et ePub→PDF)
+  function htmlToPdfBlob(innerHtml) {
+    var holder = document.createElement('div');
+    holder.style.cssText = 'position:fixed; left:-9999px; top:0; width:700px; padding:34px; background:#fff; font-family:Georgia,serif; font-size:14px; line-height:1.65; color:#111;';
+    holder.innerHTML = innerHtml;
+    holder.querySelectorAll('img').forEach(function (img) { img.style.maxWidth = '100%'; });
+    document.body.appendChild(holder);
+    return html2canvas(holder, { scale: 2, useCORS: true }).then(function (canvas) {
+      document.body.removeChild(holder);
+      var jsPDF = window.jspdf.jsPDF;
+      var doc = new jsPDF({ unit: 'pt', format: 'a4' });
+      var pageW = doc.internal.pageSize.getWidth();
+      var pageH = doc.internal.pageSize.getHeight();
+      var imgW = pageW;
+      var imgH = (canvas.height * imgW) / canvas.width;
+      var heightLeft = imgH, position = 0;
+      var imgData = canvas.toDataURL('image/jpeg', 0.92);
+      doc.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
+      heightLeft -= pageH;
+      while (heightLeft > 0) {
+        position = heightLeft - imgH;
+        doc.addPage();
+        doc.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
+        heightLeft -= pageH;
+      }
+      return doc.output('blob');
+    });
+  }
 
-  // -------------------------------------------------------------------
-  // 3. PDF → Images (zip)
-  // -------------------------------------------------------------------
-  var pdf2imgsZone = setupDropZone('drop-pdf2imgs', 'file-pdf2imgs', 'list-pdf2imgs', {
-    multiple: false,
-    onChange: function (files) {
-      document.getElementById('btn-pdf2imgs').disabled = files.length === 0;
-    }
-  });
+  // ===================================================================
+  // Fonctions de conversion — chacune prend le(s) fichier(s) + options,
+  // renvoie une Promise<{blob, filename}>
+  // ===================================================================
+  var converters = {
 
-  document.getElementById('btn-pdf2imgs').addEventListener('click', function () {
-    var file = pdf2imgsZone.getFiles()[0];
-    if (!file) return;
-    setStatus('status-pdf2imgs', 'Lecture du PDF…');
+    'image→image': function (files, opts, onProgress) {
+      var file = files[0];
+      var format = opts.format || 'image/jpeg';
+      var quality = (opts.quality || 85) / 100;
+      onProgress('Conversion…');
+      return readImageAsDataUrl(file).then(function (imgData) {
+        var canvas = document.createElement('canvas');
+        canvas.width = imgData.w; canvas.height = imgData.h;
+        var ctx = canvas.getContext('2d');
+        if (format === 'image/jpeg') { ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+        var img = new Image(); img.src = imgData.dataUrl;
+        return new Promise(function (resolve) {
+          img.onload = function () {
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob(function (blob) {
+              var ext = format === 'image/png' ? 'png' : (format === 'image/webp' ? 'webp' : 'jpg');
+              resolve({ blob: blob, filename: file.name.replace(/\.[^.]+$/, '') + '.' + ext });
+            }, format, format === 'image/png' ? undefined : quality);
+          };
+        });
+      });
+    },
 
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      var typedArray = new Uint8Array(e.target.result);
-      window.pdfjsLib.getDocument(typedArray).promise.then(function (pdf) {
-        var zip = new JSZip();
-        var pagePromises = [];
+    'image→pdf': function (files, opts, onProgress) {
+      onProgress('Assemblage de ' + files.length + ' image(s)…');
+      var jsPDF = window.jspdf.jsPDF;
+      var doc = new jsPDF();
+      return Promise.all(files.map(readImageAsDataUrl)).then(function (images) {
+        images.forEach(function (imgData, i) {
+          if (i > 0) doc.addPage();
+          var pageW = doc.internal.pageSize.getWidth();
+          var pageH = doc.internal.pageSize.getHeight();
+          var ratio = Math.min(pageW / imgData.w, pageH / imgData.h);
+          var w = imgData.w * ratio, h = imgData.h * ratio;
+          var x = (pageW - w) / 2, y = (pageH - h) / 2;
+          var format = imgData.dataUrl.indexOf('image/png') !== -1 ? 'PNG' : 'JPEG';
+          doc.addImage(imgData.dataUrl, format, x, y, w, h);
+        });
+        return { blob: doc.output('blob'), filename: 'images.pdf' };
+      });
+    },
 
-        for (var p = 1; p <= pdf.numPages; p++) {
-          pagePromises.push(
-            pdf.getPage(p).then(function (page) {
+    'pdf→image': function (files, opts, onProgress) {
+      var file = files[0];
+      onProgress('Lecture du PDF…');
+      return readFile(file).then(function (buf) {
+        return window.pdfjsLib.getDocument(new Uint8Array(buf)).promise.then(function (pdf) {
+          var zip = new JSZip();
+          var pagePromises = [];
+          for (var p = 1; p <= pdf.numPages; p++) {
+            pagePromises.push(pdf.getPage(p).then(function (page) {
               var viewport = page.getViewport({ scale: 2 });
               var canvas = document.createElement('canvas');
-              canvas.width = viewport.width;
-              canvas.height = viewport.height;
+              canvas.width = viewport.width; canvas.height = viewport.height;
               var ctx = canvas.getContext('2d');
               return page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function () {
                 return new Promise(function (resolve) {
@@ -198,269 +136,227 @@
                   }, 'image/png');
                 });
               });
-            })
-          );
-          setStatus('status-pdf2imgs', 'Rendu de la page ' + p + ' / ' + pdf.numPages + '…');
-        }
-
-        Promise.all(pagePromises).then(function () {
-          zip.generateAsync({ type: 'blob' }).then(function (zipBlob) {
-            var url = URL.createObjectURL(zipBlob);
-            setStatus('status-pdf2imgs', 'Terminé — ' + pdf.numPages + ' page(s)');
-            showDownload('download-pdf2imgs', url, file.name.replace(/\.pdf$/i, '') + '-pages.zip');
+            }));
+            onProgress('Rendu de la page ' + p + ' / ' + pdf.numPages + '…');
+          }
+          return Promise.all(pagePromises).then(function () {
+            return zip.generateAsync({ type: 'blob' }).then(function (zipBlob) {
+              return { blob: zipBlob, filename: file.name.replace(/\.pdf$/i, '') + '-pages.zip' };
+            });
           });
         });
       });
-    };
-    reader.readAsArrayBuffer(file);
-  });
+    },
 
-  // -------------------------------------------------------------------
-  // 4. Word (.docx) → PDF
-  // -------------------------------------------------------------------
-  var word2pdfZone = setupDropZone('drop-word2pdf', 'file-word2pdf', 'list-word2pdf', {
-    multiple: false,
-    onChange: function (files) {
-      document.getElementById('btn-word2pdf').disabled = files.length === 0;
-    }
-  });
-
-  document.getElementById('btn-word2pdf').addEventListener('click', function () {
-    var file = word2pdfZone.getFiles()[0];
-    if (!file) return;
-    setStatus('status-word2pdf', 'Lecture du document…');
-
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      window.mammoth.convertToHtml({ arrayBuffer: e.target.result }).then(function (result) {
-        setStatus('status-word2pdf', 'Mise en page…');
-        var holder = document.createElement('div');
-        holder.style.cssText = 'position:fixed; left:-9999px; top:0; width:700px; padding:32px; background:#fff; font-family:Georgia,serif; font-size:14px; line-height:1.6; color:#111;';
-        holder.innerHTML = result.value;
-        document.body.appendChild(holder);
-
-        html2canvas(holder, { scale: 2 }).then(function (canvas) {
-          document.body.removeChild(holder);
-          var jsPDF = window.jspdf.jsPDF;
-          var doc = new jsPDF({ unit: 'pt', format: 'a4' });
-          var pageW = doc.internal.pageSize.getWidth();
-          var pageH = doc.internal.pageSize.getHeight();
-          var imgW = pageW;
-          var imgH = (canvas.height * imgW) / canvas.width;
-          var heightLeft = imgH;
-          var position = 0;
-          var imgData = canvas.toDataURL('image/jpeg', 0.92);
-
-          doc.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
-          heightLeft -= pageH;
-          while (heightLeft > 0) {
-            position = heightLeft - imgH;
-            doc.addPage();
-            doc.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
-            heightLeft -= pageH;
-          }
-
-          var blob = doc.output('blob');
-          var url = URL.createObjectURL(blob);
-          setStatus('status-word2pdf', 'Terminé');
-          showDownload('download-word2pdf', url, file.name.replace(/\.docx?$/i, '') + '.pdf');
-        });
-      }).catch(function (err) {
-        setStatus('status-word2pdf', 'Erreur : fichier .docx illisible');
-        console.error(err);
-      });
-    };
-    reader.readAsArrayBuffer(file);
-  });
-
-  // -------------------------------------------------------------------
-  // 5. PDF → Word (texte brut, mise en forme simplifiée)
-  // -------------------------------------------------------------------
-  var pdf2wordZone = setupDropZone('drop-pdf2word', 'file-pdf2word', 'list-pdf2word', {
-    multiple: false,
-    onChange: function (files) {
-      document.getElementById('btn-pdf2word').disabled = files.length === 0;
-    }
-  });
-
-  document.getElementById('btn-pdf2word').addEventListener('click', function () {
-    var file = pdf2wordZone.getFiles()[0];
-    if (!file) return;
-    setStatus('status-pdf2word', 'Extraction du texte…');
-
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      var typedArray = new Uint8Array(e.target.result);
-      window.pdfjsLib.getDocument(typedArray).promise.then(function (pdf) {
-        var textPromises = [];
-        for (var p = 1; p <= pdf.numPages; p++) {
-          textPromises.push(
-            pdf.getPage(p).then(function (page) {
+    'pdf→word': function (files, opts, onProgress) {
+      var file = files[0];
+      onProgress('Extraction du texte…');
+      return readFile(file).then(function (buf) {
+        return window.pdfjsLib.getDocument(new Uint8Array(buf)).promise.then(function (pdf) {
+          var textPromises = [];
+          for (var p = 1; p <= pdf.numPages; p++) {
+            textPromises.push(pdf.getPage(p).then(function (page) {
               return page.getTextContent().then(function (content) {
                 return content.items.map(function (it) { return it.str; }).join(' ');
               });
-            })
-          );
-        }
-        Promise.all(textPromises).then(function (pages) {
-          var paragraphsHtml = pages.map(function (pageText, i) {
-            return '<p style="margin:0 0 12pt 0;">' + escapeHtml(pageText) + '</p>' +
-              (i < pages.length - 1 ? '<br clear="all" style="page-break-before:always" />' : '');
-          }).join('');
-
-          // Fichier .doc lisible par Word via le format HTML-in-.doc — simple et robuste,
-          // même s'il ne s'agit pas d'un vrai .docx (OOXML). Mise en forme non préservée.
-          var htmlDoc =
-            '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
-            'xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
-            '<head><meta charset="utf-8"><title>Document</title></head>' +
-            '<body style="font-family:Calibri,Arial,sans-serif; font-size:11pt;">' + paragraphsHtml + '</body></html>';
-
-          var blob = new Blob(['\ufeff', htmlDoc], { type: 'application/msword' });
-          var url = URL.createObjectURL(blob);
-          setStatus('status-pdf2word', 'Terminé — ' + pdf.numPages + ' page(s), texte brut');
-          showDownload('download-pdf2word', url, file.name.replace(/\.pdf$/i, '') + '.doc');
+            }));
+          }
+          return Promise.all(textPromises).then(function (pages) {
+            var paragraphsHtml = pages.map(function (pageText, i) {
+              return '<p style="margin:0 0 12pt 0;">' + escapeHtml(pageText) + '</p>' +
+                (i < pages.length - 1 ? '<br clear="all" style="page-break-before:always" />' : '');
+            }).join('');
+            var htmlDoc =
+              '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
+              '<head><meta charset="utf-8"><title>Document</title></head>' +
+              '<body style="font-family:Calibri,Arial,sans-serif; font-size:11pt;">' + paragraphsHtml + '</body></html>';
+            var blob = new Blob(['\ufeff', htmlDoc], { type: 'application/msword' });
+            return { blob: blob, filename: file.name.replace(/\.pdf$/i, '') + '.doc' };
+          });
         });
       });
-    };
-    reader.readAsArrayBuffer(file);
-  });
+    },
 
-  function escapeHtml(str) {
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
+    'word→pdf': function (files, opts, onProgress) {
+      var file = files[0];
+      onProgress('Lecture du document…');
+      return readFile(file).then(function (buf) {
+        return window.mammoth.convertToHtml({ arrayBuffer: buf }).then(function (result) {
+          onProgress('Mise en page…');
+          return htmlToPdfBlob(result.value).then(function (blob) {
+            return { blob: blob, filename: file.name.replace(/\.docx?$/i, '') + '.pdf' };
+          });
+        });
+      });
+    },
 
-  // -------------------------------------------------------------------
-  // 6. ePub → PDF
-  // -------------------------------------------------------------------
-  var epub2pdfZone = setupDropZone('drop-epub2pdf', 'file-epub2pdf', 'list-epub2pdf', {
-    multiple: false,
-    onChange: function (files) {
-      document.getElementById('btn-epub2pdf').disabled = files.length === 0;
-    }
-  });
-
-  function resolveZipPath(baseDir, relHref) {
-    var base = 'https://z/' + (baseDir ? baseDir + '/' : '');
-    var url = new URL(relHref.split('#')[0], base);
-    return decodeURIComponent(url.pathname.replace(/^\//, ''));
-  }
-  function dirname(path) {
-    var i = path.lastIndexOf('/');
-    return i === -1 ? '' : path.substring(0, i);
-  }
-
-  document.getElementById('btn-epub2pdf').addEventListener('click', function () {
-    var file = epub2pdfZone.getFiles()[0];
-    if (!file) return;
-    setStatus('status-epub2pdf', 'Ouverture de l\'ePub…');
-
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      JSZip.loadAsync(e.target.result).then(function (zip) {
-
-        // 1. container.xml → chemin du fichier .opf
-        return zip.file('META-INF/container.xml').async('string').then(function (containerXml) {
-          var containerDoc = new DOMParser().parseFromString(containerXml, 'application/xml');
-          var rootfile = containerDoc.querySelector('rootfile');
-          var opfPath = rootfile.getAttribute('full-path');
-          var opfDir = dirname(opfPath);
-
-          // 2. le .opf → manifeste (id → href) + ordre de lecture (spine)
-          return zip.file(opfPath).async('string').then(function (opfXml) {
-            var opfDoc = new DOMParser().parseFromString(opfXml, 'application/xml');
-            var manifest = {};
-            opfDoc.querySelectorAll('manifest item').forEach(function (item) {
-              manifest[item.getAttribute('id')] = {
-                href: item.getAttribute('href'),
-                type: item.getAttribute('media-type')
-              };
-            });
-            var spineHrefs = [];
-            opfDoc.querySelectorAll('spine itemref').forEach(function (ref) {
-              var idref = ref.getAttribute('idref');
-              if (manifest[idref]) spineHrefs.push(resolveZipPath(opfDir, manifest[idref].href));
-            });
-
-            var titleEl = opfDoc.querySelector('metadata > *[*|creator], metadata title');
-            var bookTitle = (opfDoc.querySelector('metadata title') || {}).textContent || file.name.replace(/\.epub$/i, '');
-
-            setStatus('status-epub2pdf', 'Lecture de ' + spineHrefs.length + ' chapitre(s)…');
-
-            // 3. charge chaque chapitre en HTML, en intégrant ses images en base64
-            var chapterPromises = spineHrefs.map(function (chapPath) {
-              var chapDir = dirname(chapPath);
-              return zip.file(chapPath).async('string').then(function (html) {
-                var doc = new DOMParser().parseFromString(html, 'text/html');
-                var imgs = Array.from(doc.querySelectorAll('img, image'));
-                var imgPromises = imgs.map(function (img) {
-                  var srcAttr = img.tagName.toLowerCase() === 'image' ? 'href' : 'src';
-                  var src = img.getAttribute(srcAttr) || img.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
-                  if (!src || src.indexOf('data:') === 0) return Promise.resolve();
-                  var imgPath = resolveZipPath(chapDir, src);
-                  var zf = zip.file(imgPath);
-                  if (!zf) return Promise.resolve();
-                  return zf.async('base64').then(function (b64) {
-                    var ext = imgPath.split('.').pop().toLowerCase();
-                    var mime = ext === 'png' ? 'image/png' : (ext === 'gif' ? 'image/gif' : 'image/jpeg');
-                    img.setAttribute(srcAttr, 'data:' + mime + ';base64,' + b64);
-                  }).catch(function () {});
+    'epub→pdf': function (files, opts, onProgress) {
+      var file = files[0];
+      onProgress('Ouverture de l\'ePub…');
+      return readFile(file).then(function (buf) {
+        return JSZip.loadAsync(buf).then(function (zip) {
+          return zip.file('META-INF/container.xml').async('string').then(function (containerXml) {
+            var containerDoc = new DOMParser().parseFromString(containerXml, 'application/xml');
+            var opfPath = containerDoc.querySelector('rootfile').getAttribute('full-path');
+            var opfDir = dirname(opfPath);
+            return zip.file(opfPath).async('string').then(function (opfXml) {
+              var opfDoc = new DOMParser().parseFromString(opfXml, 'application/xml');
+              var manifest = {};
+              opfDoc.querySelectorAll('manifest item').forEach(function (item) {
+                manifest[item.getAttribute('id')] = { href: item.getAttribute('href') };
+              });
+              var spineHrefs = [];
+              opfDoc.querySelectorAll('spine itemref').forEach(function (ref) {
+                var idref = ref.getAttribute('idref');
+                if (manifest[idref]) spineHrefs.push(resolveZipPath(opfDir, manifest[idref].href));
+              });
+              onProgress('Lecture de ' + spineHrefs.length + ' chapitre(s)…');
+              var chapterPromises = spineHrefs.map(function (chapPath) {
+                var chapDir = dirname(chapPath);
+                return zip.file(chapPath).async('string').then(function (html) {
+                  var doc = new DOMParser().parseFromString(html, 'text/html');
+                  var imgs = Array.from(doc.querySelectorAll('img, image'));
+                  var imgPromises = imgs.map(function (img) {
+                    var srcAttr = img.tagName.toLowerCase() === 'image' ? 'href' : 'src';
+                    var src = img.getAttribute(srcAttr) || img.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+                    if (!src || src.indexOf('data:') === 0) return Promise.resolve();
+                    var imgPath = resolveZipPath(chapDir, src);
+                    var zf = zip.file(imgPath);
+                    if (!zf) return Promise.resolve();
+                    return zf.async('base64').then(function (b64) {
+                      var ext = imgPath.split('.').pop().toLowerCase();
+                      var mime = ext === 'png' ? 'image/png' : (ext === 'gif' ? 'image/gif' : 'image/jpeg');
+                      img.setAttribute(srcAttr, 'data:' + mime + ';base64,' + b64);
+                    }).catch(function () {});
+                  });
+                  return Promise.all(imgPromises).then(function () { return doc.body ? doc.body.innerHTML : ''; });
+                }).catch(function () { return ''; });
+              });
+              return Promise.all(chapterPromises).then(function (chapters) {
+                var innerHtml = chapters.map(function (html, i) {
+                  return '<div style="' + (i > 0 ? 'page-break-before:always;' : '') + '">' + html + '</div>';
+                }).join('');
+                onProgress('Mise en page…');
+                return htmlToPdfBlob(innerHtml).then(function (blob) {
+                  return { blob: blob, filename: file.name.replace(/\.epub$/i, '') + '.pdf' };
                 });
-                return Promise.all(imgPromises).then(function () {
-                  return doc.body ? doc.body.innerHTML : '';
-                });
-              }).catch(function () { return ''; });
-            });
-
-            return Promise.all(chapterPromises).then(function (chapters) {
-              return { chapters: chapters, title: bookTitle };
+              });
             });
           });
         });
-      }).then(function (book) {
-        setStatus('status-epub2pdf', 'Mise en page…');
-        var holder = document.createElement('div');
-        holder.style.cssText = 'position:fixed; left:-9999px; top:0; width:700px; padding:36px; background:#fff; font-family:Georgia,serif; font-size:14px; line-height:1.7; color:#111;';
-        holder.innerHTML = book.chapters.map(function (html, i) {
-          return '<div style="' + (i > 0 ? 'page-break-before:always;' : '') + '">' + html + '</div>';
-        }).join('');
-        holder.querySelectorAll('img').forEach(function (img) {
-          img.style.maxWidth = '100%';
-        });
-        document.body.appendChild(holder);
-
-        return html2canvas(holder, { scale: 2, useCORS: true }).then(function (canvas) {
-          document.body.removeChild(holder);
-          var jsPDF = window.jspdf.jsPDF;
-          var doc = new jsPDF({ unit: 'pt', format: 'a4' });
-          var pageW = doc.internal.pageSize.getWidth();
-          var pageH = doc.internal.pageSize.getHeight();
-          var imgW = pageW;
-          var imgH = (canvas.height * imgW) / canvas.width;
-          var heightLeft = imgH;
-          var position = 0;
-          var imgData = canvas.toDataURL('image/jpeg', 0.9);
-
-          doc.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
-          heightLeft -= pageH;
-          while (heightLeft > 0) {
-            position = heightLeft - imgH;
-            doc.addPage();
-            doc.addImage(imgData, 'JPEG', 0, position, imgW, imgH);
-            heightLeft -= pageH;
-          }
-
-          var blob = doc.output('blob');
-          var url = URL.createObjectURL(blob);
-          setStatus('status-epub2pdf', 'Terminé — ' + book.chapters.length + ' chapitre(s)');
-          showDownload('download-epub2pdf', url, file.name.replace(/\.epub$/i, '') + '.pdf');
-        });
-      }).catch(function (err) {
-        setStatus('status-epub2pdf', 'Erreur : fichier .epub illisible ou non standard');
-        console.error(err);
       });
-    };
-    reader.readAsArrayBuffer(file);
+    }
+  };
+
+  // ===================================================================
+  // UI unifiée : "je pars de" / "et je veux" + une seule zone de dépôt
+  // ===================================================================
+  var TARGETS_BY_SOURCE = {
+    image: [{ v: 'image', t: 'Image (autre format)' }, { v: 'pdf', t: 'PDF' }],
+    pdf: [{ v: 'image', t: 'Image (PNG, une par page)' }, { v: 'word', t: 'Word (.doc)' }],
+    word: [{ v: 'pdf', t: 'PDF' }],
+    epub: [{ v: 'pdf', t: 'PDF' }]
+  };
+  var ACCEPT_BY_SOURCE = { image: 'image/*', pdf: 'application/pdf', word: '.docx', epub: '.epub' };
+
+  var sourceSel = document.getElementById('conv-source');
+  var targetSel = document.getElementById('conv-target');
+  var extraOptions = document.getElementById('conv-extra-options');
+  var drop = document.getElementById('conv-drop-unified');
+  var input = document.getElementById('conv-file-unified');
+  var fileList = document.getElementById('conv-filelist-unified');
+  var btn = document.getElementById('conv-btn-unified');
+  var statusEl = document.getElementById('conv-status-unified');
+  var downloadBox = document.getElementById('conv-download-unified');
+
+  var selectedFiles = [];
+
+  function populateTargets() {
+    var opts = TARGETS_BY_SOURCE[sourceSel.value];
+    targetSel.innerHTML = opts.map(function (o) { return '<option value="' + o.v + '">' + o.t + '</option>'; }).join('');
+    updateExtraOptions();
+    updateInputAttrs();
+  }
+
+  function updateExtraOptions() {
+    var isImgToImg = sourceSel.value === 'image' && targetSel.value === 'image';
+    if (isImgToImg) {
+      extraOptions.innerHTML =
+        '<div class="conv-options">' +
+        '<label>Format : <select id="conv-out-format"><option value="image/jpeg" selected>JPG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option></select></label>' +
+        '<span class="conv-options" id="conv-quality-wrap"><label for="conv-quality">Qualité</label><input type="range" id="conv-quality" min="30" max="100" value="85"></span>' +
+        '</div>';
+      document.getElementById('conv-out-format').addEventListener('change', function () {
+        document.getElementById('conv-quality-wrap').style.display = this.value === 'image/png' ? 'none' : 'flex';
+      });
+    } else {
+      extraOptions.innerHTML = '';
+    }
+  }
+
+  function updateInputAttrs() {
+    input.setAttribute('accept', ACCEPT_BY_SOURCE[sourceSel.value]);
+    input.multiple = (sourceSel.value === 'image' && targetSel.value === 'pdf');
+    selectedFiles = [];
+    renderFileList();
+  }
+
+  function renderFileList() {
+    fileList.innerHTML = selectedFiles.map(function (f) {
+      return '<div>' + f.name + '  ·  ' + bytesToSize(f.size) + '</div>';
+    }).join('');
+    btn.disabled = selectedFiles.length === 0;
+  }
+
+  sourceSel.addEventListener('change', populateTargets);
+  targetSel.addEventListener('change', function () { updateExtraOptions(); updateInputAttrs(); });
+
+  drop.addEventListener('click', function () { input.click(); });
+  input.addEventListener('change', function () {
+    selectedFiles = input.multiple ? Array.from(input.files) : [input.files[0]];
+    renderFileList();
   });
+  drop.addEventListener('dragover', function (e) { e.preventDefault(); drop.style.borderColor = 'var(--flag)'; });
+  drop.addEventListener('dragleave', function () { drop.style.borderColor = ''; });
+  drop.addEventListener('drop', function (e) {
+    e.preventDefault();
+    drop.style.borderColor = '';
+    var dropped = Array.from(e.dataTransfer.files);
+    selectedFiles = input.multiple ? dropped : [dropped[0]];
+    renderFileList();
+  });
+
+  btn.addEventListener('click', function () {
+    if (!selectedFiles.length) return;
+    var key = sourceSel.value + '→' + targetSel.value;
+    var convertFn = converters[key];
+    if (!convertFn) {
+      statusEl.textContent = 'Cette combinaison n\'est pas encore prise en charge.';
+      return;
+    }
+    var opts = {};
+    if (key === 'image→image') {
+      opts.format = document.getElementById('conv-out-format').value;
+      opts.quality = parseInt(document.getElementById('conv-quality').value, 10);
+    }
+    btn.disabled = true;
+    downloadBox.classList.remove('show');
+    convertFn(selectedFiles, opts, function (msg) { statusEl.textContent = msg; })
+      .then(function (result) {
+        var url = URL.createObjectURL(result.blob);
+        statusEl.textContent = 'Terminé';
+        downloadBox.innerHTML = '<a href="' + url + '" download="' + result.filename + '">Télécharger ' + result.filename + '</a>';
+        downloadBox.classList.add('show');
+        btn.disabled = false;
+      })
+      .catch(function (err) {
+        statusEl.textContent = 'Erreur pendant la conversion — vérifie le fichier.';
+        console.error(err);
+        btn.disabled = false;
+      });
+  });
+
+  // Initialisation
+  populateTargets();
 
 })();
