@@ -3,495 +3,275 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Blablabla — Détecteur de contenu IA et boîte à outils gratuite</title>
-<meta name="description" content="Repère les textes, photos et vidéos générés par IA, convertis tes fichiers (image, PDF, Word) et utilise des petits outils pratiques. Gratuit, sans compte, dans ton navigateur.">
+<title>Blablabla — Détecteurs IA, convertisseurs et petits outils</title>
+<meta name="description" content="Détecteurs de contenu IA, convertisseurs PDF / Word / images / ePub et petits outils gratuits. Tout tourne dans ton navigateur.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="canonical" href="https://TON-COMPTE.github.io/blablabla/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Blablabla — Détecteur de contenu IA et boîte à outils gratuite">
-<meta property="og:description" content="Repère les contenus générés par IA et convertis tes fichiers. Gratuit, sans compte.">
-<meta property="og:image" content="https://TON-COMPTE.github.io/blablabla/og-image.png">
-<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Blablabla — Détecteurs IA, convertisseurs et petits outils">
 <meta property="og:url" content="https://TON-COMPTE.github.io/blablabla/">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Blablabla — Détecteur IA + boîte à outils">
-<meta name="twitter:description" content="Gratuit, sans compte, tout tourne dans ton navigateur.">
+<meta property="og:image" content="https://TON-COMPTE.github.io/blablabla/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
 <style>
-/* Ajouts d'accessibilité et utilitaires (chargés après style.css) */
-.skip-link{position:absolute;left:-9999px;top:0;z-index:100;background:#fff;color:#000;padding:10px 14px;border-radius:0 0 8px 0}
-.skip-link:focus{left:0}
-.drop:focus-visible,.conv-drop:focus-visible,.tab-btn:focus-visible,.tool-tab-btn:focus-visible{outline:2px solid currentColor;outline-offset:3px}
-.hero-first{border-top:none;padding-top:56px}
-.dossier-tag{display:inline-block;margin-bottom:8px;font-size:.75rem;opacity:.7}
-.mt-10{margin-top:10px}
-.mt-14{margin-top:14px}
-.gif-preview{width:100%;margin-top:12px;border-radius:10px}
-.full-w{width:100%}
-.num-sm{width:60px;margin-left:4px}
-.qr-render{margin-top:16px;text-align:center}
+:root{--bg:#E9EDF5;--bg2:#DCE2FF;--ink:#0F1B33;--ac:#2F4BFF;--ok:#0E7C47;--bad:#C2253B;--pad:max(16px,env(safe-area-inset-left))}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+h2,h3,.logo{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) var(--pad) 10px;background:var(--bg);border-bottom:2px solid var(--ink)}
+.logo{font-weight:800;font-size:1.35rem;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.logo i{color:var(--ac);font-style:normal}
+nav{display:flex;gap:6px;overflow-x:auto}
+nav a{padding:6px 12px;border:2px solid var(--ink);border-radius:999px;color:var(--ink);text-decoration:none;font-weight:600;font-size:.88rem;white-space:nowrap}
+nav a:hover{background:var(--ink);color:#fff}
+.grp{padding:40px 0 36px;border-bottom:2px solid var(--ink);scroll-margin-top:64px}
+.grp:nth-of-type(even){background:var(--bg2)}
+.gh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:0 var(--pad) 20px}
+h2{margin:0;font-size:clamp(2.1rem,8vw,3.8rem);font-weight:800;line-height:1;letter-spacing:-.03em}
+.arr{display:flex;gap:8px}
+.arr button{width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);background:#fff;color:var(--ink);font-size:1.2rem;cursor:pointer}
+.arr button:hover{background:var(--ink);color:#fff}
+.track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:var(--pad);padding:4px var(--pad) 14px var(--pad);overscroll-behavior-x:contain}
+.card{flex:0 0 min(86vw,400px);scroll-snap-align:start;background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:20px;display:flex;flex-direction:column;gap:12px}
+.card h3{margin:0;font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+.card p.d{margin:0;font-size:.92rem;opacity:.8}
+label{display:grid;gap:4px;font-weight:600;font-size:.9rem}
+input,textarea,select{font:inherit;width:100%;border:2px solid var(--ink);border-radius:10px;padding:10px;background:#fff;color:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.drop{position:relative;display:grid;place-items:center;text-align:center;min-height:92px;padding:12px;border:2px dashed var(--ink);border-radius:14px;background:var(--bg);font-weight:600;word-break:break-word}
+.drop:focus-within{outline:3px solid var(--ac);outline-offset:2px}
+.drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;padding:0}
+.go{font:inherit;font-weight:700;background:var(--ac);color:#fff;border:2px solid var(--ink);border-radius:10px;padding:12px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.go:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.go:disabled{opacity:.55;cursor:wait}
+.st{min-height:1.4em;margin:0;font-size:.9rem}
+.st.err{color:var(--bad);font-weight:600}
+.dlink{display:block;margin-top:6px;padding:10px;border:2px solid var(--ok);border-radius:10px;color:var(--ok);font-weight:700;text-decoration:none;word-break:break-all}
+.out img,.out canvas{max-width:100%;height:auto;border-radius:10px}
+.qr canvas{display:none}
+.bar{height:14px;border:2px solid var(--ink);border-radius:99px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:var(--ac)}
+.res ul{margin:6px 0 0;padding-left:1.2em}
+.res small{display:block;margin-top:6px;opacity:.75}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
 </style>
-</head>
-<body>
-<a class="skip-link" href="#outil">Aller au contenu</a>
-
-<header class="site">
-  <div class="headrow">
-    <a href="#top" class="wordmark"><span class="mark">Blablabla</span><span class="dot"></span></a>
-    <div class="navwrap">
-      <nav class="top">
-        <a href="#outil">Détecteur</a>
-        <a href="#convertisseurs">Convertisseurs</a>
-        <a href="#autres-outils">Autres outils</a>
-      </nav>
-      <span class="free-pill">100% GRATUIT</span>
-      <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-label="Ouvrir le menu">
-        <span class="bars"><span></span><span></span><span></span></span>
-      </button>
-    </div>
-  </div>
-  <div class="mobile-nav" id="mobile-nav">
-    <div class="mobile-nav-inner">
-      <a href="#outil">Détecteur</a>
-      <a href="#convertisseurs">Convertisseurs</a>
-      <a href="#autres-outils">Autres outils</a>
-    </div>
-  </div>
-</header>
-
-<main id="top">
-
-  <section class="hero hero-first">
-    <div class="wrap hero-grid">
-      <div>
-        <h1>Repère une image, une vidéo ou un texte généré par IA — et convertis tes fichiers dans la foulée.</h1>
-        <p class="lede">Blablabla analyse les photos, vidéos et textes pour détecter les traces de génération par IA, et propose des convertisseurs gratuits (image, PDF, Word) pour manipuler tes fichiers au passage. Gratuit, sans compte, tout tourne dans ton navigateur.</p>
-      </div>
-      <div class="dossier" aria-label="Exemple illustratif de résultat">
-        <span class="dossier-tag">Exemple illustratif — pas une vraie analyse</span>
-        <div class="dossier-row"><span class="k">Document</span><span class="v">lettre_motivation.txt</span></div>
-        <div class="dossier-row"><span class="k">Score indicatif</span><span class="v">87 %</span></div>
-        <div class="dossier-row"><span class="k">Signal dominant</span><span class="v">uniformité syntaxique</span></div>
-        <div class="dossier-row"><span class="k">Fiabilité</span><span class="v">limitée</span></div>
-        <div class="stamp">◆ SIGNAUX À VÉRIFIER</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="outil" class="section-tint">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="eyebrow">MODULE 01</div>
-        <div class="title-row">
-          <span class="title-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="10" cy="10" r="6.5"/><line x1="14.8" y1="14.8" x2="20.5" y2="20.5"/></svg>
-          </span>
-          <h2>Détecteur</h2>
-        </div>
-        <p>Colle un texte, dépose une image ou une vidéo. L'analyse de texte tourne en local dans ton navigateur. Les analyses photo et vidéo, elles, envoient le fichier au fournisseur que tu choisis (via le backend fourni) et nécessitent une clé API — voir le README du dépôt.</p>
-      </div>
-
-      <div class="tool-shell">
-        <div class="card-hdr">
-          <span class="card-title">Analyse en trois volets</span>
-        </div>
-        <div class="tab-group-row">
-          <div class="tab-group" role="tablist" aria-label="Type de contenu à analyser">
-            <button class="tab-btn active" data-tab="texte" role="tab" id="tab-texte" aria-controls="panel-texte">
-              <span class="filetag txt" aria-hidden="true">TXT</span>
-              <span class="tab-label">Texte</span>
-            </button>
-            <button class="tab-btn" data-tab="photo" role="tab" id="tab-photo" aria-controls="panel-photo">
-              <span class="filetag img" aria-hidden="true">IMG</span>
-              <span class="tab-label">Photo</span>
-            </button>
-            <button class="tab-btn" data-tab="video" role="tab" id="tab-video" aria-controls="panel-video">
-              <span class="filetag vid" aria-hidden="true">VID</span>
-              <span class="tab-label">Vidéo</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="tab-panel active" id="panel-texte" role="tabpanel" aria-labelledby="tab-texte">
-          <textarea class="ta" id="text-input" aria-label="Texte à analyser" placeholder="Colle ici une lettre de motivation, un résumé de CV, ou tout autre texte à vérifier…"></textarea>
-          <div class="row-actions">
-            <button class="analyze-btn" id="btn-analyze-text">Analyser le texte</button>
-            <span class="mode-note">Analyse locale — aucune donnée envoyée à un serveur.</span>
-          </div>
-          <div class="result" aria-live="polite" id="result-text"></div>
-        </div>
-
-        <div class="tab-panel" id="panel-photo" role="tabpanel" aria-labelledby="tab-photo">
-          <div class="drop" id="drop-photo" role="button" tabindex="0">
-            <div>Dépose une image ou clique pour en choisir une</div>
-            <div class="sub">JPG, PNG — envoyée au fournisseur d'analyse choisi</div>
-          </div>
-          <input type="file" accept="image/*" id="file-photo" hidden>
-          <div class="file-preview" id="preview-photo"></div>
-          <div class="row-actions">
-            <button class="analyze-btn" id="btn-analyze-photo" disabled>Analyser la photo</button>
-            <span class="mode-note" id="note-photo">Mode démo — <button class="link" data-drawer="photo">connecter une clé API</button></span>
-          </div>
-          <div class="settings-panel" id="settings-photo">
-            <label for="provider-photo">Fournisseur</label>
-            <select id="provider-photo">
-              <option>Hive Moderation</option>
-              <option>Sightengine</option>
-              <option>Autre endpoint personnalisé</option>
-            </select>
-            <label for="key-photo">Clé API (stockée uniquement dans ce navigateur — utilise une clé limitée)</label>
-            <input type="password" id="key-photo" placeholder="sk-live-..." autocomplete="off" autocapitalize="off" spellcheck="false">
-            <button class="save-btn" data-save="photo">Enregistrer</button>
-          </div>
-          <div class="result" aria-live="polite" id="result-photo"></div>
-        </div>
-
-        <div class="tab-panel" id="panel-video" role="tabpanel" aria-labelledby="tab-video">
-          <div class="drop" id="drop-video" role="button" tabindex="0">
-            <div>Dépose un extrait vidéo ou clique pour en choisir un</div>
-            <div class="sub">MP4, MOV — envoyée au fournisseur d'analyse choisi</div>
-          </div>
-          <input type="file" accept="video/*" id="file-video" hidden>
-          <div class="file-preview" id="preview-video"></div>
-          <div class="row-actions">
-            <button class="analyze-btn" id="btn-analyze-video" disabled>Analyser la vidéo</button>
-            <span class="mode-note" id="note-video">Mode démo — <button class="link" data-drawer="video">connecter une clé API</button></span>
-          </div>
-          <div class="settings-panel" id="settings-video">
-            <label for="provider-video">Fournisseur</label>
-            <select id="provider-video">
-              <option>Hive Moderation (deepfake)</option>
-              <option>Sensity</option>
-              <option>Autre endpoint personnalisé</option>
-            </select>
-            <label for="key-video">Clé API (stockée uniquement dans ce navigateur — utilise une clé limitée)</label>
-            <input type="password" id="key-video" placeholder="sk-live-..." autocomplete="off" autocapitalize="off" spellcheck="false">
-            <button class="save-btn" data-save="video">Enregistrer</button>
-          </div>
-          <div class="result" aria-live="polite" id="result-video"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="convertisseurs">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="eyebrow">MODULE 02</div>
-        <div class="title-row">
-          <span class="title-icon tint-verified" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 8h13l-3.5-3.5"/><path d="M20 16H7l3.5 3.5"/></svg>
-          </span>
-          <h2>Convertisseurs</h2>
-        </div>
-        <p>Pratique pour manipuler tes documents et images (CV en PDF, photos, etc.). Tout se passe dans ton navigateur — aucun fichier n'est envoyé où que ce soit.</p>
-        <div class="format-strip">
-          <span class="format-chip"><span class="filelogo sm pdf">PDF</span>PDF</span>
-          <span class="format-chip"><span class="filelogo sm doc">DOC</span>Word</span>
-          <span class="format-chip"><span class="filelogo sm img">PNG</span>PNG / JPG / WebP</span>
-          <span class="format-chip"><span class="filelogo sm epub">EPUB</span>ePub</span>
-        </div>
-      </div>
-
-      <div class="conv-shell conv-shell-compact">
-        <div class="card-hdr">
-          <span class="card-title">Boîte à outils</span>
-        </div>
-        <div class="conv-panel active" id="conv-panel-unified">
-          <p class="conv-desc">Choisis un format source, un format cible, et dépose ton fichier. Tout se passe dans ton navigateur, rien n'est envoyé.</p>
-
-          <div class="conv-field">
-            <label class="conv-field-label" for="conv-source">Je pars de</label>
-            <select id="conv-source">
-              <option value="image">Image (JPG, PNG, WebP)</option>
-              <option value="pdf">PDF</option>
-              <option value="word">Word (.docx)</option>
-              <option value="epub">ePub</option>
-            </select>
-          </div>
-
-          <div class="conv-swap-arrow">↓</div>
-
-          <div class="conv-field">
-            <label class="conv-field-label" for="conv-target">Et je veux</label>
-            <select id="conv-target"></select>
-          </div>
-
-          <div id="conv-extra-options"></div>
-
-          <div class="conv-drop" id="conv-drop-unified" role="button" tabindex="0">
-            Dépose ton fichier ici
-            <div class="sub">ou clique pour parcourir</div>
-          </div>
-          <input type="file" id="conv-file-unified" hidden>
-          <div class="conv-filelist" id="conv-filelist-unified"></div>
-
-          <div class="conv-actions">
-            <button class="conv-btn" id="conv-btn-unified" disabled>Convertir</button>
-            <span role="status" class="conv-status" id="conv-status-unified"></span>
-          </div>
-          <div class="conv-download" id="conv-download-unified"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="autres-outils" class="section-tint">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="eyebrow">MODULE 03</div>
-        <div class="title-row">
-          <span class="title-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          </span>
-          <h2>Autres outils</h2>
-        </div>
-        <p>Six petits outils du quotidien, gratuits, sans compte, qui tournent dans ton navigateur.</p>
-      </div>
-
-      <div class="tool-shell">
-        <div class="card-hdr">
-          <span class="card-title" id="tools-card-title">Générateur de mèmes</span>
-        </div>
-        <div class="tab-group-row">
-          <div class="tab-group" role="tablist" aria-label="Autres outils">
-            <button class="tool-tab-btn active" data-tab2="meme" role="tab" id="tooltab-meme" aria-controls="tool-panel-meme" aria-label="Générateur de mèmes">
-              <span class="filetag img" aria-hidden="true">MEME</span>
-            </button>
-            <button class="tool-tab-btn" data-tab2="noise" role="tab" id="tooltab-noise" aria-controls="tool-panel-noise" aria-label="Bruit blanc">
-              <span class="filetag vid" aria-hidden="true">SON</span>
-            </button>
-            <button class="tool-tab-btn" data-tab2="cv" role="tab" id="tooltab-cv" aria-controls="tool-panel-cv" aria-label="CV et lettre de motivation">
-              <span class="filetag doc" aria-hidden="true">CV</span>
-            </button>
-            <button class="tool-tab-btn" data-tab2="url" role="tab" id="tooltab-url" aria-controls="tool-panel-url" aria-label="Téléchargeur de lien direct">
-              <span class="filetag txt" aria-hidden="true">URL</span>
-            </button>
-            <button class="tool-tab-btn" data-tab2="gif" role="tab" id="tooltab-gif" aria-controls="tool-panel-gif" aria-label="GIF depuis une vidéo">
-              <span class="filetag epub" aria-hidden="true">GIF</span>
-            </button>
-            <button class="tool-tab-btn" data-tab2="qr" role="tab" id="tooltab-qr" aria-controls="tool-panel-qr" aria-label="Générateur de QR code">
-              <span class="filetag pdf" aria-hidden="true">QR</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- ===== 1. Générateur de mèmes ===== -->
-        <div class="tab-panel2 active" id="tool-panel-meme" role="tabpanel" aria-labelledby="tooltab-meme">
-          <p class="conv-desc">Dépose une image, ajoute un texte en haut et en bas, télécharge ton mème.</p>
-          <div class="conv-drop" id="meme-drop" role="button" tabindex="0">Dépose une image ou clique</div>
-          <input type="file" accept="image/*" id="meme-file" hidden>
-          <div class="conv-field mt-14">
-            <label class="conv-field-label" for="meme-top">Texte du haut</label>
-            <input type="text" id="meme-top" class="tool-text-input" maxlength="80" placeholder="TEXTE DU HAUT">
-          </div>
-          <div class="conv-field mt-10">
-            <label class="conv-field-label" for="meme-bottom">Texte du bas</label>
-            <input type="text" id="meme-bottom" class="tool-text-input" maxlength="80" placeholder="TEXTE DU BAS">
-          </div>
-          <canvas id="meme-canvas" class="tool-canvas" style="display:none;"></canvas>
-          <div class="conv-actions">
-            <button class="conv-btn" id="meme-btn" disabled>Générer le mème</button>
-            <span role="status" class="conv-status" id="meme-status"></span>
-          </div>
-          <div class="conv-download" id="meme-download"></div>
-        </div>
-
-        <!-- ===== 2. Générateur de bruit blanc ===== -->
-        <div class="tab-panel2" id="tool-panel-noise" role="tabpanel" aria-labelledby="tooltab-noise">
-          <p class="conv-desc">Bruit blanc, rose ou brun en continu — pour se concentrer, dormir, ou couvrir un bruit ambiant.</p>
-          <div class="conv-field">
-            <label class="conv-field-label" for="noise-type">Type de bruit</label>
-            <select id="noise-type">
-              <option value="white">Blanc — le plus aigu, uniforme</option>
-              <option value="pink">Rose — plus doux, équilibré</option>
-              <option value="brown">Brun — grave, profond</option>
-            </select>
-          </div>
-          <div class="conv-field mt-14">
-            <label class="conv-field-label" for="noise-volume">Volume</label>
-            <input type="range" id="noise-volume" class="full-w" min="0" max="100" value="50">
-          </div>
-          <div class="conv-field mt-14">
-            <label class="conv-field-label" for="noise-timer">Arrêt automatique</label>
-            <select id="noise-timer">
-              <option value="0">Continu</option>
-              <option value="900">15 minutes</option>
-              <option value="1800">30 minutes</option>
-              <option value="3600">1 heure</option>
-            </select>
-          </div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="noise-btn">▶ Lancer</button>
-            <span role="status" class="conv-status" id="noise-status"></span>
-          </div>
-        </div>
-
-        <!-- ===== 3. Créateur de CV & lettre ===== -->
-        <div class="tab-panel2" id="tool-panel-cv" role="tabpanel" aria-labelledby="tooltab-cv">
-          <p class="conv-desc">Remplis le formulaire, télécharge un PDF propre et prêt à envoyer.</p>
-          <div class="conv-field">
-            <label class="conv-field-label" for="cv-type">Type de document</label>
-            <select id="cv-type">
-              <option value="cv">CV</option>
-              <option value="lettre">Lettre de motivation</option>
-            </select>
-          </div>
-
-          <div id="cv-fields-cv" class="mt-14">
-            <div class="conv-field"><label class="conv-field-label" for="cv-name">Nom complet</label><input type="text" id="cv-name" class="tool-text-input" placeholder="Jeanne Dupont"></div>
-            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-title">Titre / poste visé</label><input type="text" id="cv-title" class="tool-text-input" placeholder="Développeuse web"></div>
-            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-contact">Contact (email · téléphone · ville)</label><input type="text" id="cv-contact" class="tool-text-input" placeholder="jeanne@email.com · 06 12 34 56 78 · Lyon"></div>
-            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-experience">Expérience (une ligne par poste)</label><textarea id="cv-experience" class="tool-textarea" rows="4" placeholder="Développeuse — ACME Corp — 2022-2024 : refonte du site principal, +30% de vitesse de chargement"></textarea></div>
-            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-education">Formation (une ligne par diplôme)</label><textarea id="cv-education" class="tool-textarea" rows="3" placeholder="Master Informatique — Université de Lyon — 2022"></textarea></div>
-            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-skills">Compétences (séparées par des virgules)</label><input type="text" id="cv-skills" class="tool-text-input" placeholder="JavaScript, React, Node.js, SQL"></div>
-          </div>
-
-          <div id="cv-fields-lettre" class="mt-14" style="display:none;">
-            <div class="conv-field"><label class="conv-field-label" for="lettre-name">Votre nom</label><input type="text" id="lettre-name" class="tool-text-input" placeholder="Jeanne Dupont"></div>
-            <div class="conv-field mt-10"><label class="conv-field-label" for="lettre-dest">Destinataire</label><input type="text" id="lettre-dest" class="tool-text-input" placeholder="M. le Directeur des Ressources Humaines"></div>
-            <div class="conv-field mt-10"><label class="conv-field-label" for="lettre-objet">Objet</label><input type="text" id="lettre-objet" class="tool-text-input" placeholder="Candidature au poste de développeuse web"></div>
-            <div class="conv-field mt-10"><label class="conv-field-label" for="lettre-body">Corps de la lettre</label><textarea id="lettre-body" class="tool-textarea" rows="8" placeholder="Madame, Monsieur,&#10;&#10;Je me permets de vous adresser ma candidature..."></textarea></div>
-          </div>
-
-          <div class="conv-actions">
-            <button class="conv-btn" id="cv-btn">Générer le PDF</button>
-            <span role="status" class="conv-status" id="cv-status"></span>
-          </div>
-          <div class="conv-download" id="cv-download"></div>
-        </div>
-
-        <!-- ===== 4. Téléchargeur de lien direct ===== -->
-        <div class="tab-panel2" id="tool-panel-url" role="tabpanel" aria-labelledby="tooltab-url">
-          <p class="conv-desc">Colle le lien direct d'un fichier (se terminant par une extension comme .mp4, .pdf, .jpg) pour le télécharger proprement.</p>
-          <div class="conv-field">
-            <label class="conv-field-label" for="url-input">Lien direct du fichier</label>
-            <input type="text" id="url-input" class="tool-text-input" placeholder="https://exemple.com/fichier.mp4">
-          </div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="url-btn">Télécharger</button>
-            <span role="status" class="conv-status" id="url-status"></span>
-          </div>
-          <div class="conv-download" id="url-download"></div>
-          <div class="disclaimer">Fonctionne pour les liens directs vers un fichier hébergé sur un serveur qui autorise le téléchargement multi-domaine (CORS). Certains sites le bloquent — dans ce cas, un clic droit sur le lien d'origine → « Enregistrer le lien sous » fonctionne toujours. Cet outil ne télécharge pas de vidéos YouTube, Instagram ou TikTok.</div>
-        </div>
-
-        <!-- ===== 5. GIF depuis une vidéo ===== -->
-        <div class="tab-panel2" id="tool-panel-gif" role="tabpanel" aria-labelledby="tooltab-gif">
-          <p class="conv-desc">Dépose une courte vidéo, choisis un extrait, obtiens un GIF animé.</p>
-          <div class="conv-drop" id="gif-drop" role="button" tabindex="0">Dépose une vidéo ou clique</div>
-          <input type="file" accept="video/*" id="gif-file" hidden>
-          <video id="gif-preview" class="gif-preview" style="display:none;" muted playsinline></video>
-          <div class="conv-options mt-14">
-            <label>Début (s) <input type="number" id="gif-start" min="0" value="0" step="0.5" class="num-sm"></label>
-            <label>Durée (s, max 6) <input type="number" id="gif-duration" min="0.5" max="6" value="3" step="0.5" class="num-sm"></label>
-            <label>Images/s <select id="gif-fps"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option></select></label>
-          </div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="gif-btn" disabled>Générer le GIF</button>
-            <span role="status" class="conv-status" id="gif-status"></span>
-          </div>
-          <div class="conv-download" id="gif-download"></div>
-        </div>
-
-        <!-- ===== 6. Générateur de QR code ===== -->
-        <div class="tab-panel2" id="tool-panel-qr" role="tabpanel" aria-labelledby="tooltab-qr">
-          <p class="conv-desc">Texte ou lien → QR code téléchargeable en PNG.</p>
-          <div class="conv-field">
-            <label class="conv-field-label" for="qr-input">Texte ou URL</label>
-            <input type="text" id="qr-input" class="tool-text-input" placeholder="https://exemple.com">
-          </div>
-          <div class="conv-field mt-14">
-            <label class="conv-field-label" for="qr-size">Taille</label>
-            <select id="qr-size">
-              <option value="200">Petit (200px)</option>
-              <option value="400" selected>Moyen (400px)</option>
-              <option value="800">Grand (800px)</option>
-            </select>
-          </div>
-          <div id="qr-render" class="qr-render" style="display:none;"></div>
-          <div class="conv-actions">
-            <button class="conv-btn" id="qr-btn">Générer le QR code</button>
-            <span role="status" class="conv-status" id="qr-status"></span>
-          </div>
-          <div class="conv-download" id="qr-download"></div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-  </main>
-
-<footer>
-  <div class="wrap">
-    <div class="foot-row">
-      <a href="#top" class="wordmark"><span class="mark">Blablabla</span><span class="dot"></span></a>
-      <nav class="top">
-        <a href="#outil">Détecteur</a>
-        <a href="#convertisseurs">Convertisseurs</a>
-        <a href="#autres-outils">Autres outils</a>
-      </nav>
-    </div>
-    <p class="fine">Blablabla est une aide à la décision, pas une preuve. Même les meilleurs détecteurs ont des taux d'erreur réels — traite chaque résultat comme un signal à vérifier humainement, jamais comme un verdict automatique. L'analyse de texte et les conversions de fichiers se font entièrement dans ton navigateur. Seules les photos et vidéos que tu choisis d'analyser sont transmises au fournisseur d'analyse configuré.</p>
-  </div>
-</footer>
-
-<!-- Librairies pour les convertisseurs (CDN, chargées uniquement côté client) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-  // pdf.js a besoin de son worker (les scripts "defer" s'exécutent avant DOMContentLoaded)
-  document.addEventListener('DOMContentLoaded', function () {
-    if (window.pdfjsLib) {
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-    }
-  });
-</script>
-<script src="detector.js" defer></script>
-<script src="converters.js" defer></script>
-<script src="tools.js" defer></script>
+</head>
+<body>
+<header>
+  <a class="logo" href="#">Blablabla<i>.</i></a>
+  <nav aria-label="Sections">
+    <a href="#detecteurs">Détecteurs</a>
+    <a href="#convertisseurs">Convertisseurs</a>
+    <a href="#outils">Autres outils</a>
+  </nav>
+</header>
+<main id="app"></main>
 
 <script>
-// Accessibilité : synchronise aria-selected avec la classe "active" et ajoute la navigation clavier
-(function () {
-  function sync(btn) {
-    var on = btn.classList.contains('active');
-    btn.setAttribute('aria-selected', on ? 'true' : 'false');
-    btn.tabIndex = on ? 0 : -1;
+document.addEventListener('DOMContentLoaded', () => {
+const $ = (s, r = document) => r.querySelector(s);
+const F = (n, l, t = 'text', p = '') => `<label>${l}<input name="${n}" type="${t}" placeholder="${p}"></label>`;
+const T = (n, l, r = 4, p = '') => `<label>${l}<textarea name="${n}" rows="${r}" placeholder="${p}"></textarea></label>`;
+const base = f => f.name.replace(/\.[^.]+$/, '');
+const dl = (el, blob, name) => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.className = 'dlink'; a.textContent = 'Télécharger ' + name; el.append(a); };
+const need = (f, n = 1) => { if (f.length < n) throw 'Choisis un fichier d\'abord.'; };
+const clean = s => s.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
+
+function writer() {
+  const d = new jspdf.jsPDF({ unit: 'pt', format: 'a4' });
+  let y = 56; const w = d.internal.pageSize.getWidth() - 112, H = d.internal.pageSize.getHeight() - 56;
+  return { d, add(t, s = 11, b = 0, g = 6, c = 20) {
+    d.setFont('helvetica', b ? 'bold' : 'normal'); d.setFontSize(s); d.setTextColor(c);
+    for (const l of d.splitTextToSize(t, w)) { if (y > H) { d.addPage(); y = 56; } d.text(l, 56, y); y += s * 1.4; }
+    y += g; } };
+}
+const t2p = text => { const w = writer(); w.add(text); return w.d.output('blob'); };
+async function pdfPages(file) {
+  const d = await pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise, out = [];
+  for (let i = 1; i <= d.numPages; i++) { const c = await (await d.getPage(i)).getTextContent(); out.push(c.items.map(x => x.str + (x.hasEOL ? '\n' : ' ')).join('').trim()); }
+  return out;
+}
+
+/* ---------- Détecteurs ---------- */
+function txt({ v, out }) {
+  const t = (v.t || '').trim(); if (t.length < 200) throw 'Colle au moins 200 caractères.';
+  const ss = t.split(/[.!?…]+\s+/).filter(x => x.length > 3), L = ss.map(x => x.split(/\s+/).length);
+  const m = L.reduce((a, b) => a + b, 0) / L.length, sd = Math.sqrt(L.reduce((a, b) => a + (b - m) ** 2, 0) / L.length), cv = sd / m;
+  const nw = t.split(/\s+/).length;
+  const conn = (t.match(/\b(en outre|par ailleurs|de plus|en conclusion|il est important de|il convient de|dans un monde|n'hésitez pas|furthermore|moreover)\b/gi) || []).length * 100 / nw;
+  const op = ss.map(x => x.split(/\s+/)[0].toLowerCase()), rep = 1 - new Set(op).size / op.length;
+  const a = Math.max(0, Math.min(1, (0.6 - cv) / 0.3)) * 50, b = Math.min(25, conn * 12), c = Math.min(20, rep * 60);
+  const sc = Math.round(Math.min(95, a + b + c));
+  out.innerHTML = `<div class="res"><b>Score indicatif : ${sc} %</b><div class="bar"><i style="width:${sc}%"></i></div><ul>
+    <li>Rythme des phrases : ${cv < 0.4 ? 'très régulier' : 'varié'}</li>
+    <li>Connecteurs « typiques » : ${conn.toFixed(1)} pour 100 mots</li>
+    <li>Débuts de phrases répétés : ${Math.round(rep * 100)} %</li></ul>
+    <small>Indicatif, pas une preuve : ces détecteurs se trompent, surtout sur les textes courts ou écrits par des non-natifs.</small></div>`;
+}
+async function meta({ f, out }) {
+  need(f); const x = f[0], parts = x.size > 6e6 ? [x.slice(0, 3e6), x.slice(-3e6)] : [x];
+  let s = ''; for (const p of parts) s += new TextDecoder('latin1').decode(await p.arrayBuffer()); s = s.toLowerCase();
+  const K = ['c2pa', 'jumbf', 'trainedalgorithmicmedia', 'midjourney', 'dall-e', 'stable diffusion', 'firefly', 'comfyui', 'synthid', 'openai'];
+  const hit = K.filter(k => s.includes(k));
+  out.innerHTML = `<div class="res"><b>${hit.length ? 'Marqueurs IA trouvés' : 'Aucun marqueur IA trouvé'}</b>` +
+    (hit.length ? `<ul>${hit.map(k => `<li>${k}</li>`).join('')}</ul>` : '') +
+    `<small>Analyse locale des métadonnées uniquement. L'absence de marqueur ne prouve pas que le fichier est authentique : les métadonnées sont souvent supprimées.</small></div>`;
+}
+
+/* ---------- Convertisseurs ---------- */
+async function pdfWord({ f, st, out }) {
+  need(f); const pages = await pdfPages(f[0]); st('Création du Word…');
+  const esc = s => clean(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  const p = pages.map(pg => pg.split(/\n+/).map(l => `<w:p><w:r><w:t xml:space="preserve">${esc(l)}</w:t></w:r></w:p>`).join('')).join('<w:p><w:r><w:br w:type="page"/></w:r></w:p>');
+  const z = new JSZip();
+  z.file('[Content_Types].xml', '<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>');
+  z.file('_rels/.rels', '<?xml version="1.0" encoding="UTF-8"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="r1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+  z.file('word/document.xml', '<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' + p + '</w:body></w:document>');
+  dl(out, await z.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }), base(f[0]) + '.docx');
+  return 'Terminé (texte seul, sans la mise en page).';
+}
+async function wordPdf({ f, out }) {
+  need(f); const r = await mammoth.extractRawText({ arrayBuffer: await f[0].arrayBuffer() });
+  dl(out, t2p(r.value), base(f[0]) + '.pdf'); return 'Terminé (texte seul, sans la mise en page).';
+}
+async function pdfImg({ f, st, out }) {
+  need(f); const d = await pdfjsLib.getDocument({ data: await f[0].arrayBuffer() }).promise, z = new JSZip(), n = base(f[0]);
+  for (let i = 1; i <= d.numPages; i++) {
+    st(`Page ${i}/${d.numPages}…`);
+    const p = await d.getPage(i), vp = p.getViewport({ scale: 2 }), c = document.createElement('canvas');
+    c.width = vp.width; c.height = vp.height; await p.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+    const bl = await new Promise(r => c.toBlob(r, 'image/png'));
+    if (d.numPages === 1) return dl(out, bl, n + '.png');
+    z.file(`${n}-${i}.png`, bl);
   }
-  var mo = new MutationObserver(function (list) { list.forEach(function (r) { sync(r.target); }); });
-  document.querySelectorAll('[role="tab"]').forEach(function (t) {
-    sync(t);
-    mo.observe(t, { attributes: true, attributeFilter: ['class'] });
-  });
-  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
-    list.addEventListener('keydown', function (e) {
-      var items = [].slice.call(list.querySelectorAll('[role="tab"]'));
-      var i = items.indexOf(document.activeElement);
-      if (i < 0) return;
-      var n = null;
-      if (e.key === 'ArrowRight') n = items[(i + 1) % items.length];
-      else if (e.key === 'ArrowLeft') n = items[(i - 1 + items.length) % items.length];
-      else if (e.key === 'Home') n = items[0];
-      else if (e.key === 'End') n = items[items.length - 1];
-      if (n) { e.preventDefault(); n.focus(); n.click(); }
-    });
-  });
-  document.querySelectorAll('.drop, .conv-drop').forEach(function (z) {
-    z.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); z.click(); }
-    });
-  });
-})();
-</script>
+  dl(out, await z.generateAsync({ type: 'blob' }), n + '-images.zip');
+}
+async function imgPdf({ f, out }) {
+  need(f); let d;
+  for (const x of f) {
+    const im = new Image(); im.src = URL.createObjectURL(x); await im.decode();
+    const c = document.createElement('canvas'), k = c.getContext('2d'); c.width = im.naturalWidth; c.height = im.naturalHeight;
+    k.fillStyle = '#fff'; k.fillRect(0, 0, c.width, c.height); k.drawImage(im, 0, 0);
+    const w = 595, h = Math.round(c.height * w / c.width), o = h < w ? 'l' : 'p';
+    if (!d) d = new jspdf.jsPDF({ unit: 'pt', format: [w, h], orientation: o }); else d.addPage([w, h], o);
+    d.addImage(c.toDataURL('image/jpeg', .92), 'JPEG', 0, 0, w, h);
+  }
+  dl(out, d.output('blob'), (f.length > 1 ? 'images' : base(f[0])) + '.pdf');
+}
+async function epubPdf({ f, st, out }) {
+  need(f); const z = await JSZip.loadAsync(f[0]), rd = p => z.file(p).async('string'), dp = new DOMParser();
+  const opfPath = dp.parseFromString(await rd('META-INF/container.xml'), 'text/xml').querySelector('rootfile').getAttribute('full-path');
+  const dir = opfPath.replace(/[^/]*$/, ''), opf = dp.parseFromString(await rd(opfPath), 'text/xml'), man = {};
+  opf.querySelectorAll('manifest > item').forEach(i => man[i.getAttribute('id')] = i.getAttribute('href'));
+  const parts = [];
+  for (const r of opf.querySelectorAll('spine > itemref')) {
+    const fl = z.file(decodeURI(dir + man[r.getAttribute('idref')])); if (!fl) continue;
+    st('Lecture des chapitres…');
+    const doc = dp.parseFromString(await fl.async('string'), 'text/html');
+    parts.push([...doc.querySelectorAll('h1,h2,h3,h4,p,li')].map(e => e.textContent.trim()).filter(Boolean).join('\n\n'));
+  }
+  if (!parts.join('').trim()) throw 'Impossible de lire cet ePub (fichier protégé ou inhabituel).';
+  dl(out, t2p(parts.join('\n\n')), base(f[0]) + '.pdf'); return 'Terminé (texte seul, sans images).';
+}
 
+/* ---------- Autres outils ---------- */
+async function gif({ f, v, st, out }) {
+  need(f); const vd = document.createElement('video'); vd.muted = true; vd.playsInline = true; vd.src = URL.createObjectURL(f[0]);
+  await new Promise((r, j) => { vd.onloadedmetadata = r; vd.onerror = () => j('Vidéo illisible.'); });
+  const s = +v.gs || 0, dur = Math.min(+v.gd || 3, 6), fps = +v.gf, W = Math.min(480, vd.videoWidth), H = Math.round(vd.videoHeight * W / vd.videoWidth);
+  const wk = URL.createObjectURL(await (await fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js')).blob());
+  const g = new GIF({ workers: 2, quality: 10, width: W, height: H, workerScript: wk });
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext('2d');
+  for (let t = s; t < s + dur && t < vd.duration; t += 1 / fps) {
+    st(`Image à ${t.toFixed(1)} s…`); vd.currentTime = t; await new Promise(r => vd.onseeked = r);
+    x.drawImage(vd, 0, 0, W, H); g.addFrame(x, { copy: true, delay: 1000 / fps });
+  }
+  st('Assemblage du GIF…');
+  const bl = await new Promise(r => { g.on('finished', r); g.render(); });
+  const im = new Image(); im.src = URL.createObjectURL(bl); out.append(im); dl(out, bl, base(f[0]) + '.gif');
+}
+function cv({ v, out }) {
+  if (!v.n) throw 'Indique ton nom.'; const w = writer(), L = v.ty === 'lettre';
+  w.add(v.n, 20, 1, 2); w.add(v.c || '', 9, 0, 16, 100);
+  if (L) { w.add('Objet : ' + (v.ti || ''), 12, 1, 14); w.add(v.x || '', 11, 0, 0); }
+  else { w.add(v.ti || '', 13, 0, 16); [['Expérience', v.x], ['Formation', v.fo], ['Compétences', v.sk]].forEach(([h, t]) => { if (t) { w.add(h, 11, 1, 4, 100); w.add(t, 11, 0, 14); } }); }
+  dl(out, w.d.output('blob'), (L ? 'lettre-' : 'cv-') + v.n.replace(/\W+/g, '-') + '.pdf');
+}
+async function url({ v, out }) {
+  if (!/^https?:\/\//.test(v.u || '')) throw 'Colle un lien complet qui commence par http(s)://';
+  let r; try { r = await fetch(v.u); } catch { throw 'Ce site bloque le téléchargement depuis le navigateur (CORS). Essaie « Enregistrer le lien sous » sur le lien d\'origine.'; }
+  if (!r.ok) throw 'Le serveur a répondu ' + r.status + '.';
+  dl(out, await r.blob(), decodeURIComponent(new URL(v.u).pathname.split('/').pop()) || 'fichier');
+}
+function qr({ v, out }) {
+  if (!v.q) throw 'Saisis un texte ou un lien.'; const s = +v.qs, box = document.createElement('div'); box.className = 'qr';
+  out.append(box); new QRCode(box, { text: v.q, width: s, height: s, correctLevel: QRCode.CorrectLevel.M });
+  return new Promise(r => setTimeout(() => { const a = document.createElement('a'); a.href = box.querySelector('canvas').toDataURL('image/png'); a.download = 'qrcode.png'; a.className = 'dlink'; a.textContent = 'Télécharger qrcode.png'; out.append(a); r(); }, 120));
+}
+async function meme({ f, v, out }) {
+  need(f); const im = new Image(); im.src = URL.createObjectURL(f[0]); await im.decode();
+  const W = Math.min(im.naturalWidth, 800), H = Math.round(im.naturalHeight * W / im.naturalWidth), c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d'); x.drawImage(im, 0, 0, W, H); x.textAlign = 'center'; x.fillStyle = '#fff'; x.strokeStyle = '#000'; x.lineJoin = 'round';
+  const put = (t, y, base) => { if (!t) return; t = t.toUpperCase(); let s = W / 9; do { x.font = `bold ${s}px Impact,"Arial Black",sans-serif`; s -= 2; } while (x.measureText(t).width > W - 24 && s > 12); x.lineWidth = s / 6; x.textBaseline = base; x.strokeText(t, W / 2, y); x.fillText(t, W / 2, y); };
+  put(v.mt, 12, 'top'); put(v.mb, H - 12, 'bottom');
+  out.append(c); dl(out, await new Promise(r => c.toBlob(r, 'image/png')), 'meme.png');
+}
+
+/* ---------- Définition des groupes ---------- */
+const G = [
+  { id: 'detecteurs', t: 'Détecteurs', c: [
+    { id: 'txt', t: 'Texte', d: 'Colle un texte pour repérer les signes d\'une écriture générée.', f: T('t', 'Texte à analyser', 7, 'Au moins 200 caractères…'), b: 'Analyser', fn: txt },
+    { id: 'img', t: 'Image', d: 'Cherche des marqueurs IA dans les métadonnées (C2PA, générateurs connus). Le fichier reste sur ton appareil.', a: 'image/*', b: 'Analyser', fn: meta },
+    { id: 'vid', t: 'Vidéo', d: 'Même recherche de marqueurs dans une vidéo. Le fichier reste sur ton appareil.', a: 'video/*', b: 'Analyser', fn: meta } ] },
+  { id: 'convertisseurs', t: 'Convertisseurs', c: [
+    { id: 'pw', t: 'PDF → Word', d: 'Extrait le texte d\'un PDF vers un fichier .docx.', a: '.pdf,application/pdf', b: 'Convertir', fn: pdfWord },
+    { id: 'wp', t: 'Word → PDF', d: 'Transforme un fichier .docx en PDF.', a: '.docx', b: 'Convertir', fn: wordPdf },
+    { id: 'pi', t: 'PDF → Images', d: 'Une image PNG par page (en .zip si plusieurs pages).', a: '.pdf,application/pdf', b: 'Convertir', fn: pdfImg },
+    { id: 'ip', t: 'Images → PDF', d: 'Assemble une ou plusieurs images en un seul PDF.', a: 'image/*', m: 1, b: 'Convertir', fn: imgPdf },
+    { id: 'ep', t: 'ePub → PDF', d: 'Convertit un livre ePub (sans protection) en PDF.', a: '.epub,application/epub+zip', b: 'Convertir', fn: epubPdf } ] },
+  { id: 'outils', t: 'Autres outils', c: [
+    { id: 'gif', t: 'GIF', d: 'Découpe un extrait de vidéo (6 s max) en GIF animé.', a: 'video/*', f: '<div class="row">' + F('gs', 'Début (s)', 'number', '0') + F('gd', 'Durée (s)', 'number', '3') + '<label>Images/s<select name="gf"><option>5</option><option selected>10</option><option>15</option></select></label></div>', b: 'Créer le GIF', fn: gif },
+    { id: 'cv', t: 'CV et lettre', d: 'Remplis le formulaire, télécharge un PDF propre.', f: '<label>Type<select name="ty"><option value="cv">CV</option><option value="lettre">Lettre de motivation</option></select></label>' + F('n', 'Nom complet', 'text', 'Jeanne Dupont') + F('ti', 'Poste visé (CV) ou objet (lettre)') + F('c', 'Contact', 'text', 'email · téléphone · ville') + T('x', 'Expériences (CV) ou texte de la lettre', 5) + T('fo', 'Formation (CV)', 3) + F('sk', 'Compétences (CV)', 'text', 'séparées par des virgules'), b: 'Générer le PDF', fn: cv },
+    { id: 'url', t: 'Lien direct', d: 'Télécharge un fichier à partir de son lien direct (.pdf, .jpg, .mp4…). Ne marche pas avec YouTube, Instagram ou TikTok.', f: F('u', 'Lien du fichier', 'url', 'https://exemple.com/fichier.pdf'), b: 'Télécharger', fn: url },
+    { id: 'qr', t: 'QR code', d: 'Transforme un texte ou un lien en QR code PNG.', f: F('q', 'Texte ou lien', 'text', 'https://exemple.com') + '<label>Taille<select name="qs"><option value="256">Petit</option><option value="512" selected>Moyen</option><option value="1024">Grand</option></select></label>', b: 'Générer', fn: qr },
+    { id: 'meme', t: 'Mème', d: 'Ajoute un texte en haut et en bas d\'une image.', a: 'image/*', f: F('mt', 'Texte du haut') + F('mb', 'Texte du bas'), b: 'Créer le mème', fn: meme } ] }
+];
+const R = {};
+$('#app').innerHTML = G.map(g => `<section class="grp" id="${g.id}">
+  <div class="gh"><h2>${g.t}</h2><div class="arr"><button type="button" data-d="-1" aria-label="Précédent">←</button><button type="button" data-d="1" aria-label="Suivant">→</button></div></div>
+  <div class="track" tabindex="0" role="region" aria-label="${g.t} — fais défiler horizontalement">${g.c.map(s => { R[s.id] = s; return `<article class="card" id="${s.id}">
+    <h3>${s.t}</h3><p class="d">${s.d}</p>
+    ${s.a ? `<label class="drop"><span class="fn">Dépose un fichier ou touche pour choisir</span><input type="file" accept="${s.a}" ${s.m ? 'multiple' : ''} aria-label="Choisir un fichier"></label>` : ''}
+    ${s.f || ''}<button type="button" class="go">${s.b}</button><p class="st" role="status"></p><div class="out" aria-live="polite"></div></article>`; }).join('')}</div></section>`).join('');
+
+document.addEventListener('change', e => {
+  if (e.target.type !== 'file') return;
+  const n = [...e.target.files].map(x => x.name).join(', ');
+  e.target.closest('.drop').querySelector('.fn').textContent = n || 'Dépose un fichier ou touche pour choisir';
+});
+document.addEventListener('click', async e => {
+  const ar = e.target.closest('.arr button');
+  if (ar) { const t = ar.closest('.grp').querySelector('.track'); t.scrollBy({ left: ar.dataset.d * t.clientWidth * .8 }); return; }
+  const b = e.target.closest('.go'); if (!b) return;
+  const c = b.closest('.card'), s = R[c.id], stEl = $('.st', c), out = $('.out', c), v = {};
+  c.querySelectorAll('[name]').forEach(i => v[i.name] = i.value);
+  const f = [...(($('input[type=file]', c) || {}).files || [])];
+  const st = (m, err) => { stEl.textContent = m; stEl.classList.toggle('err', !!err); };
+  out.innerHTML = ''; b.disabled = true; st('En cours…');
+  try { const m = await s.fn({ f, v, st, out, c }); st(typeof m === 'string' ? m : 'Terminé.'); }
+  catch (err) { st(typeof err === 'string' ? err : 'Erreur : ' + (err && err.message || err), 1); }
+  b.disabled = false;
+});
+if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+});
+</script>
 </body>
 </html>
