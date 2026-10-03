@@ -3,23 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Blablabla — Vérifier et convertir des documents de candidature</title>
-<meta name="description" content="Outil gratuit pour repérer les CV, photos et entretiens générés par IA, et convertir des fichiers image / PDF / Word — tout tourne dans ton navigateur.">
+<title>Blablabla — Détecteur de contenu IA et boîte à outils gratuite</title>
+<meta name="description" content="Repère les textes, photos et vidéos générés par IA, convertis tes fichiers (image, PDF, Word) et utilise des petits outils pratiques. Gratuit, sans compte, dans ton navigateur.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="canonical" href="https://TON-COMPTE.github.io/blablabla/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Blablabla — Vérifier et convertir des documents de candidature">
-<meta property="og:description" content="Outil gratuit pour repérer les CV, photos et entretiens générés par IA, et convertir des fichiers image / PDF / Word.">
+<meta property="og:title" content="Blablabla — Détecteur de contenu IA et boîte à outils gratuite">
+<meta property="og:description" content="Repère les contenus générés par IA et convertis tes fichiers. Gratuit, sans compte.">
+<meta property="og:image" content="https://TON-COMPTE.github.io/blablabla/og-image.png">
+<meta property="og:locale" content="fr_FR">
 <meta property="og:url" content="https://TON-COMPTE.github.io/blablabla/">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Blablabla — Détecteur IA + Convertisseurs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blablabla — Détecteur IA + boîte à outils">
 <meta name="twitter:description" content="Gratuit, sans compte, tout tourne dans ton navigateur.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<style>
+/* Ajouts d'accessibilité et utilitaires (chargés après style.css) */
+.skip-link{position:absolute;left:-9999px;top:0;z-index:100;background:#fff;color:#000;padding:10px 14px;border-radius:0 0 8px 0}
+.skip-link:focus{left:0}
+.drop:focus-visible,.conv-drop:focus-visible,.tab-btn:focus-visible,.tool-tab-btn:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.hero-first{border-top:none;padding-top:56px}
+.dossier-tag{display:inline-block;margin-bottom:8px;font-size:.75rem;opacity:.7}
+.mt-10{margin-top:10px}
+.mt-14{margin-top:14px}
+.gif-preview{width:100%;margin-top:12px;border-radius:10px}
+.full-w{width:100%}
+.num-sm{width:60px;margin-left:4px}
+.qr-render{margin-top:16px;text-align:center}
+</style>
 </head>
 <body>
+<a class="skip-link" href="#outil">Aller au contenu</a>
 
 <header class="site">
   <div class="headrow">
@@ -47,18 +64,19 @@
 
 <main id="top">
 
-  <section class="hero" style="border-top:none; padding-top:56px;">
+  <section class="hero hero-first">
     <div class="wrap hero-grid">
       <div>
         <h1>Repère une image, une vidéo ou un texte généré par IA — et convertis tes fichiers dans la foulée.</h1>
         <p class="lede">Blablabla analyse les photos, vidéos et textes pour détecter les traces de génération par IA, et propose des convertisseurs gratuits (image, PDF, Word) pour manipuler tes fichiers au passage. Gratuit, sans compte, tout tourne dans ton navigateur.</p>
       </div>
-      <div class="dossier">
+      <div class="dossier" aria-label="Exemple illustratif de résultat">
+        <span class="dossier-tag">Exemple illustratif — pas une vraie analyse</span>
         <div class="dossier-row"><span class="k">Document</span><span class="v">lettre_motivation.txt</span></div>
-        <div class="dossier-row"><span class="k">Score de génération IA</span><span class="v">87 %</span></div>
+        <div class="dossier-row"><span class="k">Score indicatif</span><span class="v">87 %</span></div>
         <div class="dossier-row"><span class="k">Signal dominant</span><span class="v">uniformité syntaxique</span></div>
-        <div class="dossier-row"><span class="k">Confiance</span><span class="v">élevée</span></div>
-        <div class="stamp">◆ SUSPECT — À REVÉRIFIER</div>
+        <div class="dossier-row"><span class="k">Fiabilité</span><span class="v">limitée</span></div>
+        <div class="stamp">◆ SIGNAUX À VÉRIFIER</div>
       </div>
     </div>
   </section>
@@ -73,7 +91,7 @@
           </span>
           <h2>Détecteur</h2>
         </div>
-        <p>Colle un texte, dépose une image ou une vidéo. L'analyse de texte tourne en local dans ton navigateur — les analyses image et vidéo nécessitent une clé API et le backend fourni (voir le README du dépôt).</p>
+        <p>Colle un texte, dépose une image ou une vidéo. L'analyse de texte tourne en local dans ton navigateur. Les analyses photo et vidéo, elles, envoient le fichier au fournisseur que tu choisis (via le backend fourni) et nécessitent une clé API — voir le README du dépôt.</p>
       </div>
 
       <div class="tool-shell">
@@ -81,79 +99,79 @@
           <span class="card-title">Analyse en trois volets</span>
         </div>
         <div class="tab-group-row">
-          <div class="tab-group">
-            <button class="tab-btn active" data-tab="texte">
-              <span class="filetag txt">TXT</span>
+          <div class="tab-group" role="tablist" aria-label="Type de contenu à analyser">
+            <button class="tab-btn active" data-tab="texte" role="tab" id="tab-texte" aria-controls="panel-texte">
+              <span class="filetag txt" aria-hidden="true">TXT</span>
               <span class="tab-label">Texte</span>
             </button>
-            <button class="tab-btn" data-tab="photo">
-              <span class="filetag img">IMG</span>
+            <button class="tab-btn" data-tab="photo" role="tab" id="tab-photo" aria-controls="panel-photo">
+              <span class="filetag img" aria-hidden="true">IMG</span>
               <span class="tab-label">Photo</span>
             </button>
-            <button class="tab-btn" data-tab="video">
-              <span class="filetag vid">VID</span>
+            <button class="tab-btn" data-tab="video" role="tab" id="tab-video" aria-controls="panel-video">
+              <span class="filetag vid" aria-hidden="true">VID</span>
               <span class="tab-label">Vidéo</span>
             </button>
           </div>
         </div>
 
-        <div class="tab-panel active" id="panel-texte">
-          <textarea class="ta" id="text-input" placeholder="Colle ici une lettre de motivation, un résumé de CV, ou tout autre texte à vérifier…"></textarea>
+        <div class="tab-panel active" id="panel-texte" role="tabpanel" aria-labelledby="tab-texte">
+          <textarea class="ta" id="text-input" aria-label="Texte à analyser" placeholder="Colle ici une lettre de motivation, un résumé de CV, ou tout autre texte à vérifier…"></textarea>
           <div class="row-actions">
             <button class="analyze-btn" id="btn-analyze-text">Analyser le texte</button>
             <span class="mode-note">Analyse locale — aucune donnée envoyée à un serveur.</span>
           </div>
-          <div class="result" id="result-text"></div>
+          <div class="result" aria-live="polite" id="result-text"></div>
         </div>
 
-        <div class="tab-panel" id="panel-photo">
-          <div class="drop" id="drop-photo">
+        <div class="tab-panel" id="panel-photo" role="tabpanel" aria-labelledby="tab-photo">
+          <div class="drop" id="drop-photo" role="button" tabindex="0">
             <div>Dépose une image ou clique pour en choisir une</div>
-            <div class="sub">JPG, PNG — analysée via l'API connectée</div>
+            <div class="sub">JPG, PNG — envoyée au fournisseur d'analyse choisi</div>
           </div>
-          <input type="file" accept="image/*" id="file-photo" style="display:none">
+          <input type="file" accept="image/*" id="file-photo" hidden>
           <div class="file-preview" id="preview-photo"></div>
           <div class="row-actions">
             <button class="analyze-btn" id="btn-analyze-photo" disabled>Analyser la photo</button>
             <span class="mode-note" id="note-photo">Mode démo — <button class="link" data-drawer="photo">connecter une clé API</button></span>
           </div>
           <div class="settings-panel" id="settings-photo">
-            <label>Fournisseur</label>
+            <label for="provider-photo">Fournisseur</label>
             <select id="provider-photo">
               <option>Hive Moderation</option>
               <option>Sightengine</option>
               <option>Autre endpoint personnalisé</option>
             </select>
-            <label>Clé API (stockée uniquement dans ce navigateur)</label>
-            <input type="text" id="key-photo" placeholder="sk-live-...">
+            <label for="key-photo">Clé API (stockée uniquement dans ce navigateur — utilise une clé limitée)</label>
+            <input type="password" id="key-photo" placeholder="sk-live-..." autocomplete="off" autocapitalize="off" spellcheck="false">
             <button class="save-btn" data-save="photo">Enregistrer</button>
           </div>
-          <div class="result" id="result-photo"></div>
+          <div class="result" aria-live="polite" id="result-photo"></div>
         </div>
 
-        <div class="tab-panel" id="panel-video">
-          <div class="drop" id="drop-video">
+        <div class="tab-panel" id="panel-video" role="tabpanel" aria-labelledby="tab-video">
+          <div class="drop" id="drop-video" role="button" tabindex="0">
             <div>Dépose un extrait vidéo ou clique pour en choisir un</div>
-            <div class="sub">MP4, MOV — analysée via l'API connectée</div>
+            <div class="sub">MP4, MOV — envoyée au fournisseur d'analyse choisi</div>
           </div>
-          <input type="file" accept="video/*" id="file-video" style="display:none">
+          <input type="file" accept="video/*" id="file-video" hidden>
           <div class="file-preview" id="preview-video"></div>
           <div class="row-actions">
             <button class="analyze-btn" id="btn-analyze-video" disabled>Analyser la vidéo</button>
             <span class="mode-note" id="note-video">Mode démo — <button class="link" data-drawer="video">connecter une clé API</button></span>
           </div>
           <div class="settings-panel" id="settings-video">
-            <label>Fournisseur</label>
+            <label for="provider-video">Fournisseur</label>
             <select id="provider-video">
               <option>Hive Moderation (deepfake)</option>
               <option>Sensity</option>
               <option>Autre endpoint personnalisé</option>
             </select>
-            <label>Clé API (stockée uniquement dans ce navigateur)</label>
-            <input type="text" id="key-video" placeholder="sk-live-...">
+            <label for="key-video">Clé API (stockée uniquement dans ce navigateur — utilise une clé limitée)</label>
+            <input type="password" id="key-video" placeholder="sk-live-..." autocomplete="off" autocapitalize="off" spellcheck="false">
             <button class="save-btn" data-save="video">Enregistrer</button>
           </div>
-          <div class="result" id="result-video"></div>
+          <div class="result" aria-live="polite" id="result-video"></div>
         </div>
       </div>
     </div>
@@ -169,7 +187,7 @@
           </span>
           <h2>Convertisseurs</h2>
         </div>
-        <p>Pratique pour manipuler les documents de candidature (CV en PDF, photos, etc.). Tout se passe dans ton navigateur — aucun fichier n'est envoyé où que ce soit.</p>
+        <p>Pratique pour manipuler tes documents et images (CV en PDF, photos, etc.). Tout se passe dans ton navigateur — aucun fichier n'est envoyé où que ce soit.</p>
         <div class="format-strip">
           <span class="format-chip"><span class="filelogo sm pdf">PDF</span>PDF</span>
           <span class="format-chip"><span class="filelogo sm doc">DOC</span>Word</span>
@@ -186,7 +204,7 @@
           <p class="conv-desc">Choisis un format source, un format cible, et dépose ton fichier. Tout se passe dans ton navigateur, rien n'est envoyé.</p>
 
           <div class="conv-field">
-            <label class="conv-field-label">Je pars de</label>
+            <label class="conv-field-label" for="conv-source">Je pars de</label>
             <select id="conv-source">
               <option value="image">Image (JPG, PNG, WebP)</option>
               <option value="pdf">PDF</option>
@@ -198,22 +216,22 @@
           <div class="conv-swap-arrow">↓</div>
 
           <div class="conv-field">
-            <label class="conv-field-label">Et je veux</label>
+            <label class="conv-field-label" for="conv-target">Et je veux</label>
             <select id="conv-target"></select>
           </div>
 
           <div id="conv-extra-options"></div>
 
-          <div class="conv-drop" id="conv-drop-unified">
+          <div class="conv-drop" id="conv-drop-unified" role="button" tabindex="0">
             Dépose ton fichier ici
             <div class="sub">ou clique pour parcourir</div>
           </div>
-          <input type="file" id="conv-file-unified" style="display:none">
+          <input type="file" id="conv-file-unified" hidden>
           <div class="conv-filelist" id="conv-filelist-unified"></div>
 
           <div class="conv-actions">
             <button class="conv-btn" id="conv-btn-unified" disabled>Convertir</button>
-            <span class="conv-status" id="conv-status-unified"></span>
+            <span role="status" class="conv-status" id="conv-status-unified"></span>
           </div>
           <div class="conv-download" id="conv-download-unified"></div>
         </div>
@@ -239,66 +257,66 @@
           <span class="card-title" id="tools-card-title">Générateur de mèmes</span>
         </div>
         <div class="tab-group-row">
-          <div class="tab-group">
-            <button class="tool-tab-btn active" data-tab2="meme">
-              <span class="filetag img">MEME</span>
+          <div class="tab-group" role="tablist" aria-label="Autres outils">
+            <button class="tool-tab-btn active" data-tab2="meme" role="tab" id="tooltab-meme" aria-controls="tool-panel-meme" aria-label="Générateur de mèmes">
+              <span class="filetag img" aria-hidden="true">MEME</span>
             </button>
-            <button class="tool-tab-btn" data-tab2="noise">
-              <span class="filetag vid">SON</span>
+            <button class="tool-tab-btn" data-tab2="noise" role="tab" id="tooltab-noise" aria-controls="tool-panel-noise" aria-label="Bruit blanc">
+              <span class="filetag vid" aria-hidden="true">SON</span>
             </button>
-            <button class="tool-tab-btn" data-tab2="cv">
-              <span class="filetag doc">CV</span>
+            <button class="tool-tab-btn" data-tab2="cv" role="tab" id="tooltab-cv" aria-controls="tool-panel-cv" aria-label="CV et lettre de motivation">
+              <span class="filetag doc" aria-hidden="true">CV</span>
             </button>
-            <button class="tool-tab-btn" data-tab2="url">
-              <span class="filetag txt">URL</span>
+            <button class="tool-tab-btn" data-tab2="url" role="tab" id="tooltab-url" aria-controls="tool-panel-url" aria-label="Téléchargeur de lien direct">
+              <span class="filetag txt" aria-hidden="true">URL</span>
             </button>
-            <button class="tool-tab-btn" data-tab2="gif">
-              <span class="filetag epub">GIF</span>
+            <button class="tool-tab-btn" data-tab2="gif" role="tab" id="tooltab-gif" aria-controls="tool-panel-gif" aria-label="GIF depuis une vidéo">
+              <span class="filetag epub" aria-hidden="true">GIF</span>
             </button>
-            <button class="tool-tab-btn" data-tab2="qr">
-              <span class="filetag pdf">QR</span>
+            <button class="tool-tab-btn" data-tab2="qr" role="tab" id="tooltab-qr" aria-controls="tool-panel-qr" aria-label="Générateur de QR code">
+              <span class="filetag pdf" aria-hidden="true">QR</span>
             </button>
           </div>
         </div>
 
         <!-- ===== 1. Générateur de mèmes ===== -->
-        <div class="tab-panel2 active" id="tool-panel-meme">
+        <div class="tab-panel2 active" id="tool-panel-meme" role="tabpanel" aria-labelledby="tooltab-meme">
           <p class="conv-desc">Dépose une image, ajoute un texte en haut et en bas, télécharge ton mème.</p>
-          <div class="conv-drop" id="meme-drop">Dépose une image ou clique</div>
-          <input type="file" accept="image/*" id="meme-file" style="display:none">
-          <div class="conv-field" style="margin-top:14px;">
-            <label class="conv-field-label">Texte du haut</label>
+          <div class="conv-drop" id="meme-drop" role="button" tabindex="0">Dépose une image ou clique</div>
+          <input type="file" accept="image/*" id="meme-file" hidden>
+          <div class="conv-field mt-14">
+            <label class="conv-field-label" for="meme-top">Texte du haut</label>
             <input type="text" id="meme-top" class="tool-text-input" maxlength="80" placeholder="TEXTE DU HAUT">
           </div>
-          <div class="conv-field" style="margin-top:10px;">
-            <label class="conv-field-label">Texte du bas</label>
+          <div class="conv-field mt-10">
+            <label class="conv-field-label" for="meme-bottom">Texte du bas</label>
             <input type="text" id="meme-bottom" class="tool-text-input" maxlength="80" placeholder="TEXTE DU BAS">
           </div>
           <canvas id="meme-canvas" class="tool-canvas" style="display:none;"></canvas>
           <div class="conv-actions">
             <button class="conv-btn" id="meme-btn" disabled>Générer le mème</button>
-            <span class="conv-status" id="meme-status"></span>
+            <span role="status" class="conv-status" id="meme-status"></span>
           </div>
           <div class="conv-download" id="meme-download"></div>
         </div>
 
         <!-- ===== 2. Générateur de bruit blanc ===== -->
-        <div class="tab-panel2" id="tool-panel-noise">
+        <div class="tab-panel2" id="tool-panel-noise" role="tabpanel" aria-labelledby="tooltab-noise">
           <p class="conv-desc">Bruit blanc, rose ou brun en continu — pour se concentrer, dormir, ou couvrir un bruit ambiant.</p>
           <div class="conv-field">
-            <label class="conv-field-label">Type de bruit</label>
+            <label class="conv-field-label" for="noise-type">Type de bruit</label>
             <select id="noise-type">
               <option value="white">Blanc — le plus aigu, uniforme</option>
               <option value="pink">Rose — plus doux, équilibré</option>
               <option value="brown">Brun — grave, profond</option>
             </select>
           </div>
-          <div class="conv-field" style="margin-top:14px;">
-            <label class="conv-field-label">Volume</label>
-            <input type="range" id="noise-volume" min="0" max="100" value="50" style="width:100%;">
+          <div class="conv-field mt-14">
+            <label class="conv-field-label" for="noise-volume">Volume</label>
+            <input type="range" id="noise-volume" class="full-w" min="0" max="100" value="50">
           </div>
-          <div class="conv-field" style="margin-top:14px;">
-            <label class="conv-field-label">Arrêt automatique</label>
+          <div class="conv-field mt-14">
+            <label class="conv-field-label" for="noise-timer">Arrêt automatique</label>
             <select id="noise-timer">
               <option value="0">Continu</option>
               <option value="900">15 minutes</option>
@@ -308,96 +326,96 @@
           </div>
           <div class="conv-actions">
             <button class="conv-btn" id="noise-btn">▶ Lancer</button>
-            <span class="conv-status" id="noise-status"></span>
+            <span role="status" class="conv-status" id="noise-status"></span>
           </div>
         </div>
 
         <!-- ===== 3. Créateur de CV & lettre ===== -->
-        <div class="tab-panel2" id="tool-panel-cv">
+        <div class="tab-panel2" id="tool-panel-cv" role="tabpanel" aria-labelledby="tooltab-cv">
           <p class="conv-desc">Remplis le formulaire, télécharge un PDF propre et prêt à envoyer.</p>
           <div class="conv-field">
-            <label class="conv-field-label">Type de document</label>
+            <label class="conv-field-label" for="cv-type">Type de document</label>
             <select id="cv-type">
               <option value="cv">CV</option>
               <option value="lettre">Lettre de motivation</option>
             </select>
           </div>
 
-          <div id="cv-fields-cv" style="margin-top:14px;">
-            <div class="conv-field"><label class="conv-field-label">Nom complet</label><input type="text" id="cv-name" class="tool-text-input" placeholder="Jeanne Dupont"></div>
-            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Titre / poste visé</label><input type="text" id="cv-title" class="tool-text-input" placeholder="Développeuse web"></div>
-            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Contact (email · téléphone · ville)</label><input type="text" id="cv-contact" class="tool-text-input" placeholder="jeanne@email.com · 06 12 34 56 78 · Lyon"></div>
-            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Expérience (une ligne par poste)</label><textarea id="cv-experience" class="tool-textarea" rows="4" placeholder="Développeuse — ACME Corp — 2022-2024 : refonte du site principal, +30% de vitesse de chargement"></textarea></div>
-            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Formation (une ligne par diplôme)</label><textarea id="cv-education" class="tool-textarea" rows="3" placeholder="Master Informatique — Université de Lyon — 2022"></textarea></div>
-            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Compétences (séparées par des virgules)</label><input type="text" id="cv-skills" class="tool-text-input" placeholder="JavaScript, React, Node.js, SQL"></div>
+          <div id="cv-fields-cv" class="mt-14">
+            <div class="conv-field"><label class="conv-field-label" for="cv-name">Nom complet</label><input type="text" id="cv-name" class="tool-text-input" placeholder="Jeanne Dupont"></div>
+            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-title">Titre / poste visé</label><input type="text" id="cv-title" class="tool-text-input" placeholder="Développeuse web"></div>
+            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-contact">Contact (email · téléphone · ville)</label><input type="text" id="cv-contact" class="tool-text-input" placeholder="jeanne@email.com · 06 12 34 56 78 · Lyon"></div>
+            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-experience">Expérience (une ligne par poste)</label><textarea id="cv-experience" class="tool-textarea" rows="4" placeholder="Développeuse — ACME Corp — 2022-2024 : refonte du site principal, +30% de vitesse de chargement"></textarea></div>
+            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-education">Formation (une ligne par diplôme)</label><textarea id="cv-education" class="tool-textarea" rows="3" placeholder="Master Informatique — Université de Lyon — 2022"></textarea></div>
+            <div class="conv-field mt-10"><label class="conv-field-label" for="cv-skills">Compétences (séparées par des virgules)</label><input type="text" id="cv-skills" class="tool-text-input" placeholder="JavaScript, React, Node.js, SQL"></div>
           </div>
 
-          <div id="cv-fields-lettre" style="display:none; margin-top:14px;">
-            <div class="conv-field"><label class="conv-field-label">Votre nom</label><input type="text" id="lettre-name" class="tool-text-input" placeholder="Jeanne Dupont"></div>
-            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Destinataire</label><input type="text" id="lettre-dest" class="tool-text-input" placeholder="M. le Directeur des Ressources Humaines"></div>
-            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Objet</label><input type="text" id="lettre-objet" class="tool-text-input" placeholder="Candidature au poste de développeuse web"></div>
-            <div class="conv-field" style="margin-top:10px;"><label class="conv-field-label">Corps de la lettre</label><textarea id="lettre-body" class="tool-textarea" rows="8" placeholder="Madame, Monsieur,&#10;&#10;Je me permets de vous adresser ma candidature..."></textarea></div>
+          <div id="cv-fields-lettre" class="mt-14" style="display:none;">
+            <div class="conv-field"><label class="conv-field-label" for="lettre-name">Votre nom</label><input type="text" id="lettre-name" class="tool-text-input" placeholder="Jeanne Dupont"></div>
+            <div class="conv-field mt-10"><label class="conv-field-label" for="lettre-dest">Destinataire</label><input type="text" id="lettre-dest" class="tool-text-input" placeholder="M. le Directeur des Ressources Humaines"></div>
+            <div class="conv-field mt-10"><label class="conv-field-label" for="lettre-objet">Objet</label><input type="text" id="lettre-objet" class="tool-text-input" placeholder="Candidature au poste de développeuse web"></div>
+            <div class="conv-field mt-10"><label class="conv-field-label" for="lettre-body">Corps de la lettre</label><textarea id="lettre-body" class="tool-textarea" rows="8" placeholder="Madame, Monsieur,&#10;&#10;Je me permets de vous adresser ma candidature..."></textarea></div>
           </div>
 
           <div class="conv-actions">
             <button class="conv-btn" id="cv-btn">Générer le PDF</button>
-            <span class="conv-status" id="cv-status"></span>
+            <span role="status" class="conv-status" id="cv-status"></span>
           </div>
           <div class="conv-download" id="cv-download"></div>
         </div>
 
         <!-- ===== 4. Téléchargeur de lien direct ===== -->
-        <div class="tab-panel2" id="tool-panel-url">
+        <div class="tab-panel2" id="tool-panel-url" role="tabpanel" aria-labelledby="tooltab-url">
           <p class="conv-desc">Colle le lien direct d'un fichier (se terminant par une extension comme .mp4, .pdf, .jpg) pour le télécharger proprement.</p>
           <div class="conv-field">
-            <label class="conv-field-label">Lien direct du fichier</label>
+            <label class="conv-field-label" for="url-input">Lien direct du fichier</label>
             <input type="text" id="url-input" class="tool-text-input" placeholder="https://exemple.com/fichier.mp4">
           </div>
           <div class="conv-actions">
             <button class="conv-btn" id="url-btn">Télécharger</button>
-            <span class="conv-status" id="url-status"></span>
+            <span role="status" class="conv-status" id="url-status"></span>
           </div>
           <div class="conv-download" id="url-download"></div>
           <div class="disclaimer">Fonctionne pour les liens directs vers un fichier hébergé sur un serveur qui autorise le téléchargement multi-domaine (CORS). Certains sites le bloquent — dans ce cas, un clic droit sur le lien d'origine → « Enregistrer le lien sous » fonctionne toujours. Cet outil ne télécharge pas de vidéos YouTube, Instagram ou TikTok.</div>
         </div>
 
         <!-- ===== 5. GIF depuis une vidéo ===== -->
-        <div class="tab-panel2" id="tool-panel-gif">
+        <div class="tab-panel2" id="tool-panel-gif" role="tabpanel" aria-labelledby="tooltab-gif">
           <p class="conv-desc">Dépose une courte vidéo, choisis un extrait, obtiens un GIF animé.</p>
-          <div class="conv-drop" id="gif-drop">Dépose une vidéo ou clique</div>
-          <input type="file" accept="video/*" id="gif-file" style="display:none">
-          <video id="gif-preview" style="display:none; width:100%; margin-top:12px; border-radius:10px;" muted playsinline></video>
-          <div class="conv-options" style="margin-top:14px;">
-            <label>Début (s) <input type="number" id="gif-start" min="0" value="0" step="0.5" style="width:60px; margin-left:4px;"></label>
-            <label>Durée (s, max 6) <input type="number" id="gif-duration" min="0.5" max="6" value="3" step="0.5" style="width:60px; margin-left:4px;"></label>
+          <div class="conv-drop" id="gif-drop" role="button" tabindex="0">Dépose une vidéo ou clique</div>
+          <input type="file" accept="video/*" id="gif-file" hidden>
+          <video id="gif-preview" class="gif-preview" style="display:none;" muted playsinline></video>
+          <div class="conv-options mt-14">
+            <label>Début (s) <input type="number" id="gif-start" min="0" value="0" step="0.5" class="num-sm"></label>
+            <label>Durée (s, max 6) <input type="number" id="gif-duration" min="0.5" max="6" value="3" step="0.5" class="num-sm"></label>
             <label>Images/s <select id="gif-fps"><option value="5">5</option><option value="10" selected>10</option><option value="15">15</option></select></label>
           </div>
           <div class="conv-actions">
             <button class="conv-btn" id="gif-btn" disabled>Générer le GIF</button>
-            <span class="conv-status" id="gif-status"></span>
+            <span role="status" class="conv-status" id="gif-status"></span>
           </div>
           <div class="conv-download" id="gif-download"></div>
         </div>
 
         <!-- ===== 6. Générateur de QR code ===== -->
-        <div class="tab-panel2" id="tool-panel-qr">
+        <div class="tab-panel2" id="tool-panel-qr" role="tabpanel" aria-labelledby="tooltab-qr">
           <p class="conv-desc">Texte ou lien → QR code téléchargeable en PNG.</p>
           <div class="conv-field">
-            <label class="conv-field-label">Texte ou URL</label>
+            <label class="conv-field-label" for="qr-input">Texte ou URL</label>
             <input type="text" id="qr-input" class="tool-text-input" placeholder="https://exemple.com">
           </div>
-          <div class="conv-field" style="margin-top:14px;">
-            <label class="conv-field-label">Taille</label>
+          <div class="conv-field mt-14">
+            <label class="conv-field-label" for="qr-size">Taille</label>
             <select id="qr-size">
               <option value="200">Petit (200px)</option>
               <option value="400" selected>Moyen (400px)</option>
               <option value="800">Grand (800px)</option>
             </select>
           </div>
-          <div id="qr-render" style="display:none; margin-top:16px; text-align:center;"></div>
+          <div id="qr-render" class="qr-render" style="display:none;"></div>
           <div class="conv-actions">
             <button class="conv-btn" id="qr-btn">Générer le QR code</button>
-            <span class="conv-status" id="qr-status"></span>
+            <span role="status" class="conv-status" id="qr-status"></span>
           </div>
           <div class="conv-download" id="qr-download"></div>
         </div>
@@ -417,27 +435,63 @@
         <a href="#autres-outils">Autres outils</a>
       </nav>
     </div>
-    <p class="fine">Blablabla est une aide à la décision, pas une preuve. Même les meilleurs détecteurs ont des taux d'erreur réels — traite chaque résultat comme un signal à vérifier humainement, jamais comme un verdict automatique. Les conversions de fichiers se font entièrement dans ton navigateur ; aucun document n'est envoyé à un serveur.</p>
+    <p class="fine">Blablabla est une aide à la décision, pas une preuve. Même les meilleurs détecteurs ont des taux d'erreur réels — traite chaque résultat comme un signal à vérifier humainement, jamais comme un verdict automatique. L'analyse de texte et les conversions de fichiers se font entièrement dans ton navigateur. Seules les photos et vidéos que tu choisis d'analyser sont transmises au fournisseur d'analyse configuré.</p>
   </div>
 </footer>
 
 <!-- Librairies pour les convertisseurs (CDN, chargées uniquement côté client) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-  // pdf.js a besoin de son worker pour fonctionner
-  if (window.pdfjsLib) {
-    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  }
+  // pdf.js a besoin de son worker (les scripts "defer" s'exécutent avant DOMContentLoaded)
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.pdfjsLib) {
+      window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  });
 </script>
-<script src="detector.js"></script>
-<script src="converters.js"></script>
-<script src="tools.js"></script>
+<script src="detector.js" defer></script>
+<script src="converters.js" defer></script>
+<script src="tools.js" defer></script>
+
+<script>
+// Accessibilité : synchronise aria-selected avec la classe "active" et ajoute la navigation clavier
+(function () {
+  function sync(btn) {
+    var on = btn.classList.contains('active');
+    btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    btn.tabIndex = on ? 0 : -1;
+  }
+  var mo = new MutationObserver(function (list) { list.forEach(function (r) { sync(r.target); }); });
+  document.querySelectorAll('[role="tab"]').forEach(function (t) {
+    sync(t);
+    mo.observe(t, { attributes: true, attributeFilter: ['class'] });
+  });
+  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
+    list.addEventListener('keydown', function (e) {
+      var items = [].slice.call(list.querySelectorAll('[role="tab"]'));
+      var i = items.indexOf(document.activeElement);
+      if (i < 0) return;
+      var n = null;
+      if (e.key === 'ArrowRight') n = items[(i + 1) % items.length];
+      else if (e.key === 'ArrowLeft') n = items[(i - 1 + items.length) % items.length];
+      else if (e.key === 'Home') n = items[0];
+      else if (e.key === 'End') n = items[items.length - 1];
+      if (n) { e.preventDefault(); n.focus(); n.click(); }
+    });
+  });
+  document.querySelectorAll('.drop, .conv-drop').forEach(function (z) {
+    z.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); z.click(); }
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
