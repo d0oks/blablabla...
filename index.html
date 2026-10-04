@@ -12,50 +12,55 @@
 <meta property="og:image" content="https://TON-COMPTE.github.io/blablabla/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0a0d14">
 <style>
-:root{--bg:#E9EDF5;--bg2:#DCE2FF;--ink:#0F1B33;--ac:#2F4BFF;--ok:#0E7C47;--bad:#C2253B;--pad:max(16px,env(safe-area-inset-left))}
-*{box-sizing:border-box}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0d14;--s1:#111827;--s2:#1a2332;--b2:rgba(255,255,255,.14);--red:rgba(220,38,38,.18);--red-h:rgba(220,38,38,.35);--gold:#f0b429;--cyan:#38bdf8;--green:#22c55e;--bad:#ef4444;--text:#c9d3e3;--muted:#8aa3be;--hp:'MedievalSharp',serif;--pad:max(16px,env(safe-area-inset-left))}
 html{scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-h2,h3,.logo{font-family:"Bricolage Grotesque",system-ui,sans-serif}
-header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top)) var(--pad) 10px;background:var(--bg);border-bottom:2px solid var(--ink)}
-.logo{font-weight:800;font-size:1.35rem;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
-.logo i{color:var(--ac);font-style:normal}
-nav{display:flex;gap:6px;overflow-x:auto}
-nav a{padding:6px 12px;border:2px solid var(--ink);border-radius:999px;color:var(--ink);text-decoration:none;font-weight:600;font-size:.88rem;white-space:nowrap}
-nav a:hover{background:var(--ink);color:#fff}
-.grp{padding:40px 0 36px;border-bottom:2px solid var(--ink);scroll-margin-top:64px}
-.grp:nth-of-type(even){background:var(--bg2)}
-.gh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:0 var(--pad) 20px}
-h2{margin:0;font-size:clamp(2.1rem,8vw,3.8rem);font-weight:800;line-height:1;letter-spacing:-.03em}
+body{background:linear-gradient(180deg,#0a0d14,#0d1119) fixed;color:var(--text);font:15px/1.5 'Inter',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+.logo-bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 20px 14px;background:rgba(10,13,20,.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--red);box-shadow:0 1px 0 rgba(239,68,68,.35)}
+.logo-bar svg{width:46px;height:46px;flex:none}
+.logo-text-main,.f-logo{font-family:var(--hp);letter-spacing:.5px;background:linear-gradient(90deg,var(--gold),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-text-main{font-size:2.1rem;filter:drop-shadow(0 0 10px rgba(239,68,68,.35))}
+.grp{padding:34px 0 26px;border-bottom:1px solid var(--red)}
+.gh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 var(--pad) 16px}
+h2{display:flex;align-items:center;gap:12px;font-size:1.5rem;font-weight:700;color:#fff;letter-spacing:-.01em}
+.gi,.ci{display:grid;place-items:center;flex:none;border:1px solid var(--red-h);background:var(--s2);color:var(--gold)}
+.gi{width:44px;height:44px;border-radius:14px}.gi svg{width:24px;height:24px}
+.ci{width:36px;height:36px;border-radius:11px}.ci svg{width:20px;height:20px}
 .arr{display:flex;gap:8px}
-.arr button{width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);background:#fff;color:var(--ink);font-size:1.2rem;cursor:pointer}
-.arr button:hover{background:var(--ink);color:#fff}
-.track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:var(--pad);padding:4px var(--pad) 14px var(--pad);overscroll-behavior-x:contain}
-.card{flex:0 0 min(86vw,400px);scroll-snap-align:start;background:#fff;border:2px solid var(--ink);border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:20px;display:flex;flex-direction:column;gap:12px}
-.card h3{margin:0;font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
-.card p.d{margin:0;font-size:.92rem;opacity:.8}
-label{display:grid;gap:4px;font-weight:600;font-size:.9rem}
-input,textarea,select{font:inherit;width:100%;border:2px solid var(--ink);border-radius:10px;padding:10px;background:#fff;color:inherit}
-.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.drop{position:relative;display:grid;place-items:center;text-align:center;min-height:92px;padding:12px;border:2px dashed var(--ink);border-radius:14px;background:var(--bg);font-weight:600;word-break:break-word}
-.drop:focus-within{outline:3px solid var(--ac);outline-offset:2px}
+.arr button{width:40px;height:40px;border-radius:50%;border:1px solid var(--b2);background:var(--s1);color:var(--cyan);font-size:1.1rem;cursor:pointer}
+.arr button:hover{border-color:var(--red-h)}
+.track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:var(--pad);padding:4px var(--pad) 14px;overscroll-behavior-x:contain}
+.card{position:relative;overflow:hidden;flex:0 0 min(78vw,300px);height:400px;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;padding:16px;background:linear-gradient(180deg,var(--s1),rgba(17,24,39,.95));border:1px solid var(--red);border-radius:16px;box-shadow:0 12px 32px -20px rgba(0,0,0,.85);transition:border-color .3s}
+.card:hover{border-color:var(--red-h)}
+.card>*{position:relative;z-index:1}
+.card>.wm{position:absolute;z-index:0;right:-18px;top:-18px;width:130px;height:130px;color:var(--cyan);opacity:.07;pointer-events:none}
+.ch{display:flex;align-items:center;gap:10px}
+.card h3{font-size:1.05rem;font-weight:700;color:#fff}
+.d{font-size:.82rem;color:var(--muted)}
+.cb{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:2px}
+label{display:grid;gap:4px;font-weight:600;font-size:.78rem;color:var(--muted)}
+input,textarea,select{font:inherit;font-size:16px;width:100%;color:var(--text);background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:9px}
+textarea{resize:none}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.drop{position:relative;display:grid;place-items:center;text-align:center;min-height:84px;padding:10px;border:1px dashed var(--b2);border-radius:12px;background:var(--s2);font-weight:600;font-size:.85rem;word-break:break-word}
+.drop:focus-within{outline:2px solid var(--cyan);outline-offset:2px}
 .drop input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;padding:0}
-.go{font:inherit;font-weight:700;background:var(--ac);color:#fff;border:2px solid var(--ink);border-radius:10px;padding:12px;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
-.go:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.go:disabled{opacity:.55;cursor:wait}
-.st{min-height:1.4em;margin:0;font-size:.9rem}
-.st.err{color:var(--bad);font-weight:600}
-.dlink{display:block;margin-top:6px;padding:10px;border:2px solid var(--ok);border-radius:10px;color:var(--ok);font-weight:700;text-decoration:none;word-break:break-all}
+.go{font:inherit;font-weight:700;color:#0a0d14;background:linear-gradient(90deg,var(--gold),var(--cyan));border:0;border-radius:10px;padding:11px;cursor:pointer}
+.go:disabled{opacity:.5;cursor:wait}
+.st{min-height:1.2em;font-size:.8rem}.st.err{color:var(--bad);font-weight:600}
+.dlink{display:block;margin-top:6px;padding:9px;border:1px solid var(--green);border-radius:10px;color:var(--green);font-weight:600;font-size:.85rem;text-decoration:none;word-break:break-all}
 .out img,.out canvas{max-width:100%;height:auto;border-radius:10px}
 .qr canvas{display:none}
-.bar{height:14px;border:2px solid var(--ink);border-radius:99px;overflow:hidden;margin:6px 0}
-.bar i{display:block;height:100%;background:var(--ac)}
-.res ul{margin:6px 0 0;padding-left:1.2em}
-.res small{display:block;margin-top:6px;opacity:.75}
-:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.bar{height:10px;border-radius:99px;background:var(--s2);overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--cyan))}
+.res{font-size:.85rem}.res ul{margin:6px 0 0;padding-left:1.1em}.res small{display:block;margin-top:6px;color:var(--muted)}
+footer{padding:18px 20px calc(18px + env(safe-area-inset-bottom));text-align:center}
+.f-logo{font-size:1rem}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -65,15 +70,12 @@ input,textarea,select{font:inherit;width:100%;border:2px solid var(--ink);border
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-<header>
-  <a class="logo" href="#">Blablabla<i>.</i></a>
-  <nav aria-label="Sections">
-    <a href="#detecteurs">Détecteurs</a>
-    <a href="#convertisseurs">Convertisseurs</a>
-    <a href="#outils">Autres outils</a>
-  </nav>
+<header class="logo-bar">
+  <svg viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="lg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#f0b429"/><stop offset="1" stop-color="#38bdf8"/></linearGradient></defs><path d="M7 7h24a4 4 0 0 1 4 4v13a4 4 0 0 1-4 4H19l-8 7v-7H7a4 4 0 0 1-4-4V11a4 4 0 0 1 4-4z" fill="#111827" stroke="url(#lg)" stroke-width="2.5" stroke-linejoin="round"/><circle cx="12" cy="17.5" r="2.3" fill="#f0b429"/><circle cx="19" cy="17.5" r="2.3" fill="#a8c76a"/><circle cx="26" cy="17.5" r="2.3" fill="#38bdf8"/><path d="M38 20h3a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4h-2v6l-6-6h-6a4 4 0 0 1-4-4v-2" fill="none" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <h1 class="logo-text-main">Blablabla</h1>
 </header>
 <main id="app"></main>
+<footer><span class="f-logo">Blablabla</span></footer>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -227,30 +229,47 @@ async function meme({ f, v, out }) {
 
 /* ---------- Définition des groupes ---------- */
 const G = [
-  { id: 'detecteurs', t: 'Détecteurs', c: [
-    { id: 'txt', t: 'Texte', d: 'Colle un texte pour repérer les signes d\'une écriture générée.', f: T('t', 'Texte à analyser', 7, 'Au moins 200 caractères…'), b: 'Analyser', fn: txt },
-    { id: 'img', t: 'Image', d: 'Cherche des marqueurs IA dans les métadonnées (C2PA, générateurs connus). Le fichier reste sur ton appareil.', a: 'image/*', b: 'Analyser', fn: meta },
-    { id: 'vid', t: 'Vidéo', d: 'Même recherche de marqueurs dans une vidéo. Le fichier reste sur ton appareil.', a: 'video/*', b: 'Analyser', fn: meta } ] },
-  { id: 'convertisseurs', t: 'Convertisseurs', c: [
-    { id: 'pw', t: 'PDF → Word', d: 'Extrait le texte d\'un PDF vers un fichier .docx.', a: '.pdf,application/pdf', b: 'Convertir', fn: pdfWord },
-    { id: 'wp', t: 'Word → PDF', d: 'Transforme un fichier .docx en PDF.', a: '.docx', b: 'Convertir', fn: wordPdf },
-    { id: 'pi', t: 'PDF → Images', d: 'Une image PNG par page (en .zip si plusieurs pages).', a: '.pdf,application/pdf', b: 'Convertir', fn: pdfImg },
-    { id: 'ip', t: 'Images → PDF', d: 'Assemble une ou plusieurs images en un seul PDF.', a: 'image/*', m: 1, b: 'Convertir', fn: imgPdf },
-    { id: 'ep', t: 'ePub → PDF', d: 'Convertit un livre ePub (sans protection) en PDF.', a: '.epub,application/epub+zip', b: 'Convertir', fn: epubPdf } ] },
-  { id: 'outils', t: 'Autres outils', c: [
-    { id: 'gif', t: 'GIF', d: 'Découpe un extrait de vidéo (6 s max) en GIF animé.', a: 'video/*', f: '<div class="row">' + F('gs', 'Début (s)', 'number', '0') + F('gd', 'Durée (s)', 'number', '3') + '<label>Images/s<select name="gf"><option>5</option><option selected>10</option><option>15</option></select></label></div>', b: 'Créer le GIF', fn: gif },
-    { id: 'cv', t: 'CV et lettre', d: 'Remplis le formulaire, télécharge un PDF propre.', f: '<label>Type<select name="ty"><option value="cv">CV</option><option value="lettre">Lettre de motivation</option></select></label>' + F('n', 'Nom complet', 'text', 'Jeanne Dupont') + F('ti', 'Poste visé (CV) ou objet (lettre)') + F('c', 'Contact', 'text', 'email · téléphone · ville') + T('x', 'Expériences (CV) ou texte de la lettre', 5) + T('fo', 'Formation (CV)', 3) + F('sk', 'Compétences (CV)', 'text', 'séparées par des virgules'), b: 'Générer le PDF', fn: cv },
-    { id: 'url', t: 'Lien direct', d: 'Télécharge un fichier à partir de son lien direct (.pdf, .jpg, .mp4…). Ne marche pas avec YouTube, Instagram ou TikTok.', f: F('u', 'Lien du fichier', 'url', 'https://exemple.com/fichier.pdf'), b: 'Télécharger', fn: url },
-    { id: 'qr', t: 'QR code', d: 'Transforme un texte ou un lien en QR code PNG.', f: F('q', 'Texte ou lien', 'text', 'https://exemple.com') + '<label>Taille<select name="qs"><option value="256">Petit</option><option value="512" selected>Moyen</option><option value="1024">Grand</option></select></label>', b: 'Générer', fn: qr },
-    { id: 'meme', t: 'Mème', d: 'Ajoute un texte en haut et en bas d\'une image.', a: 'image/*', f: F('mt', 'Texte du haut') + F('mb', 'Texte du bas'), b: 'Créer le mème', fn: meme } ] }
+  { id: 'detecteurs', i: '🔍', t: 'Détecteurs', c: [
+    { id: 'txt', i: '✍️', t: 'Texte', d: 'Colle un texte pour repérer les signes d\'une écriture générée.', f: T('t', 'Texte à analyser', 5, 'Au moins 200 caractères…'), b: 'Analyser', fn: txt },
+    { id: 'img', i: '🖼️', t: 'Image', d: 'Cherche des marqueurs IA dans les métadonnées (C2PA, générateurs connus). Le fichier reste sur ton appareil.', a: 'image/*', b: 'Analyser', fn: meta },
+    { id: 'vid', i: '🎬', t: 'Vidéo', d: 'Même recherche de marqueurs dans une vidéo. Le fichier reste sur ton appareil.', a: 'video/*', b: 'Analyser', fn: meta } ] },
+  { id: 'convertisseurs', i: '🔄', t: 'Convertisseurs', c: [
+    { id: 'pw', i: '📄', fm: ['PDF', 'DOCX'], t: 'PDF → Word', d: 'Extrait le texte d\'un PDF vers un fichier .docx.', a: '.pdf,application/pdf', b: 'Convertir', fn: pdfWord },
+    { id: 'wp', i: '📝', fm: ['DOCX', 'PDF'], t: 'Word → PDF', d: 'Transforme un fichier .docx en PDF.', a: '.docx', b: 'Convertir', fn: wordPdf },
+    { id: 'pi', i: '🖼️', fm: ['PDF', 'PNG'], t: 'PDF → Images', d: 'Une image PNG par page (en .zip si plusieurs pages).', a: '.pdf,application/pdf', b: 'Convertir', fn: pdfImg },
+    { id: 'ip', i: '📑', fm: ['IMG', 'PDF'], t: 'Images → PDF', d: 'Assemble une ou plusieurs images en un seul PDF.', a: 'image/*', m: 1, b: 'Convertir', fn: imgPdf },
+    { id: 'ep', i: '📚', fm: ['EPUB', 'PDF'], t: 'ePub → PDF', d: 'Convertit un livre ePub (sans protection) en PDF.', a: '.epub,application/epub+zip', b: 'Convertir', fn: epubPdf } ] },
+  { id: 'outils', i: '🧰', t: 'Autres outils', c: [
+    { id: 'gif', i: '🎞️', t: 'GIF', d: 'Découpe un extrait de vidéo (6 s max) en GIF animé.', a: 'video/*', f: '<div class="row">' + F('gs', 'Début (s)', 'number', '0') + F('gd', 'Durée (s)', 'number', '3') + '<label>Images/s<select name="gf"><option>5</option><option selected>10</option><option>15</option></select></label></div>', b: 'Créer le GIF', fn: gif },
+    { id: 'cv', i: '🧾', t: 'CV et lettre', d: 'Remplis le formulaire, télécharge un PDF propre.', f: '<label>Type<select name="ty"><option value="cv">CV</option><option value="lettre">Lettre de motivation</option></select></label>' + F('n', 'Nom complet', 'text', 'Jeanne Dupont') + F('ti', 'Poste visé (CV) ou objet (lettre)') + F('c', 'Contact', 'text', 'email · téléphone · ville') + T('x', 'Expériences (CV) ou texte de la lettre', 4) + T('fo', 'Formation (CV)', 2) + F('sk', 'Compétences (CV)', 'text', 'séparées par des virgules'), b: 'Générer le PDF', fn: cv },
+    { id: 'url', i: '🔗', t: 'Lien direct', d: 'Télécharge un fichier à partir de son lien direct (.pdf, .jpg, .mp4…). Ne marche pas avec YouTube, Instagram ou TikTok.', f: F('u', 'Lien du fichier', 'url', 'https://exemple.com/fichier.pdf'), b: 'Télécharger', fn: url },
+    { id: 'qr', i: '📱', t: 'QR code', d: 'Transforme un texte ou un lien en QR code PNG.', f: F('q', 'Texte ou lien', 'text', 'https://exemple.com') + '<label>Taille<select name="qs"><option value="256">Petit</option><option value="512" selected>Moyen</option><option value="1024">Grand</option></select></label>', b: 'Générer', fn: qr },
+    { id: 'meme', i: '😂', t: 'Mème', d: 'Ajoute un texte en haut et en bas d\'une image.', a: 'image/*', f: F('mt', 'Texte du haut') + F('mb', 'Texte du bas'), b: 'Créer le mème', fn: meme } ] }
 ];
+const I = {
+  detecteurs: '<circle cx="10" cy="10" r="6"/><path d="M15 15l6 6"/>',
+  convertisseurs: '<path d="M4 8h14l-3-3M20 16H6l3 3"/>',
+  outils: '<path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.5 2.5-2.5-1-1-2.5z"/>',
+  txt: '<path d="M4 6h16M4 10h16M4 14h10M4 18h7"/>',
+  img: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M3 17l5-4 4 3 3-2 6 4"/>',
+  vid: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M10 9.5v5l4.5-2.5z"/>',
+  pw: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 13h6M9 17h4"/>',
+  ep: '<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5"/><path d="M9 7h6"/>',
+  gif: '<path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2M20 4v5h-5M4 20v-5h5"/>',
+  cv: '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/>',
+  url: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  qr: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7h-3"/>',
+  meme: '<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M8 15c2 2 6 2 8 0"/>'
+};
+I.wp = I.pw; I.pi = I.img; I.ip = I.img;
+const ico = (k, c = '') => `<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[k]}</svg>`;
 const R = {};
 $('#app').innerHTML = G.map(g => `<section class="grp" id="${g.id}">
-  <div class="gh"><h2>${g.t}</h2><div class="arr"><button type="button" data-d="-1" aria-label="Précédent">←</button><button type="button" data-d="1" aria-label="Suivant">→</button></div></div>
+  <div class="gh"><h2><span class="gi">${ico(g.id)}</span>${g.t}</h2><div class="arr"><button type="button" data-d="-1" aria-label="Précédent">←</button><button type="button" data-d="1" aria-label="Suivant">→</button></div></div>
   <div class="track" tabindex="0" role="region" aria-label="${g.t} — fais défiler horizontalement">${g.c.map(s => { R[s.id] = s; return `<article class="card" id="${s.id}">
-    <h3>${s.t}</h3><p class="d">${s.d}</p>
-    ${s.a ? `<label class="drop"><span class="fn">Dépose un fichier ou touche pour choisir</span><input type="file" accept="${s.a}" ${s.m ? 'multiple' : ''} aria-label="Choisir un fichier"></label>` : ''}
-    ${s.f || ''}<button type="button" class="go">${s.b}</button><p class="st" role="status"></p><div class="out" aria-live="polite"></div></article>`; }).join('')}</div></section>`).join('');
+    ${ico(s.id, 'wm')}<div class="ch"><span class="ci">${ico(s.id)}</span><h3>${s.t}</h3></div><p class="d">${s.d}</p>
+    <div class="cb">${s.a ? `<label class="drop"><span class="fn">Dépose un fichier ou touche pour choisir</span><input type="file" accept="${s.a}" ${s.m ? 'multiple' : ''} aria-label="Choisir un fichier"></label>` : ''}${s.f || ''}<p class="st" role="status"></p><div class="out" aria-live="polite"></div></div>
+    <button type="button" class="go">${s.b}</button></article>`; }).join('')}</div></section>`).join('');
 
 document.addEventListener('change', e => {
   if (e.target.type !== 'file') return;
